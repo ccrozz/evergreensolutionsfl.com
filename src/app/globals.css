@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green-dark: #1B5E20;
+  --green-mid: #00838F;
+  --green-leaf: #4CAF50;
+  --cream: #FFF8E1;
+  --sand: #F5F0E8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-brand-cream font-body text-brand-dark antialiased;
+}
+
+::selection {
+  @apply bg-brand-midGreen/30 text-brand-dark;
+}
+
+.container {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
