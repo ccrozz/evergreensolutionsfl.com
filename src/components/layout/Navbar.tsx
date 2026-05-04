@@ -24,7 +24,8 @@ export default function Navbar() {
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 80));
 
   useEffect(() => {
-    setMounted(true);
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
   }, []);
 
   useEffect(() => {
