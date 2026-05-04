@@ -1,47 +1,57 @@
-export default function FloridaMap() {
-  const pins = [
-    { label: "Jacksonville", cx: 310, cy: 118 },
-    { label: "Orlando", cx: 278, cy: 220 },
-    { label: "Tampa", cx: 214, cy: 258 },
-    { label: "Fort Myers", cx: 218, cy: 330 },
-    { label: "Miami", cx: 308, cy: 392 },
-  ];
+import Image from "next/image";
 
+type CityPin = {
+  label: string;
+  x: number;
+  y: number;
+};
+
+const CITY_PINS: CityPin[] = [
+  // Percent coordinates tuned to the daytime full-state image in /public/florida-satellite.jpg.
+  { label: "Jacksonville", x: 55, y: 37 },
+  { label: "Orlando", x: 52, y: 55 },
+  { label: "Tampa", x: 43, y: 59 },
+  { label: "Fort Myers", x: 50, y: 72 },
+  { label: "Miami", x: 69, y: 82 },
+  { label: "Brevard County", x: 65, y: 56.4 },
+  { label: "Broward County", x: 71.1, y: 77.1 },
+  { label: "Alachua County", x: 50.6, y: 44.5 },
+  { label: "Highlands County", x: 57.1, y: 64.3 },
+];
+
+export default function FloridaMap() {
   return (
-    <svg
-      viewBox="0 0 400 500"
-      xmlns="http://www.w3.org/2000/svg"
-      className="mx-auto w-full max-w-sm"
+    <div
+      className="relative mx-auto aspect-[17/22] w-full overflow-hidden rounded-2xl shadow-soft"
       role="img"
-      aria-label="Map of Florida with city coverage pins"
+      aria-label="High-resolution daytime satellite photo of Florida with city and county coverage pins"
     >
-      <path
-        d="M180,20 L360,20 L370,80 L380,180 L370,280 L340,360 L300,420 L270,460 L250,480 L230,470 L200,440 L180,400 L160,360 L140,300 L130,240 L140,180 L150,100 Z"
-        fill="#D4E8D0"
-        stroke="#1B5E20"
-        strokeWidth="3"
+      <Image
+        src="/florida-satellite.jpg"
+        alt="Daytime satellite photo of Florida from space"
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 560px"
+        className="object-cover"
+        quality={95}
       />
-      {pins.map((pin) => (
-        <g key={pin.label} className="cursor-pointer group">
-          <circle
-            cx={pin.cx}
-            cy={pin.cy}
-            r="10"
-            fill="#1B5E20"
-            className="origin-center transition-transform duration-200 group-hover:scale-125"
-          />
-          <circle cx={pin.cx} cy={pin.cy} r="4" fill="white" />
-          <text
-            x={pin.cx + 14}
-            y={pin.cy + 4}
-            fontSize="11"
-            fill="#1B5E20"
-            fontFamily="DM Sans"
-          >
-            {pin.label}
-          </text>
-        </g>
+
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+
+      {CITY_PINS.map((pin) => (
+        <div
+          key={pin.label}
+          className="absolute -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+        >
+          <div className="group relative cursor-pointer">
+            <span className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-leafGreen/30 blur-[1px]" />
+            <span className="relative block h-3.5 w-3.5 rounded-full border border-white bg-brand-leafGreen shadow-[0_0_0_1px_rgba(0,0,0,0.2)]" />
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-black/55 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm">
+              {pin.label}
+            </span>
+          </div>
+        </div>
       ))}
-    </svg>
+    </div>
   );
 }
