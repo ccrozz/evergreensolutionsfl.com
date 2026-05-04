@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     description: "Restoring Florida, One Landscape at a Time.",
   },
   icons: {
-    icon: "/brand/logo-icon.svg",
-    apple: "/brand/logo-icon.svg",
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/logo.png", type: "image/png" }],
   },
 };
 
