@@ -9,7 +9,7 @@ type CityPin = {
 const CITY_PINS: CityPin[] = [
   // Percent coordinates tuned to the daytime full-state image in /public/florida-satellite.jpg.
   { label: "Jacksonville", x: 55, y: 37 },
-  { label: "Orlando", x: 52, y: 55 },
+  { label: "Orlando", x: 52, y: 49 },
   { label: "Tampa", x: 43, y: 59 },
   { label: "Fort Myers", x: 50, y: 72 },
   { label: "Miami", x: 69, y: 82 },
