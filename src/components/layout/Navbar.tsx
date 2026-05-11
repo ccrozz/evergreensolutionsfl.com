@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
@@ -133,7 +133,11 @@ export default function Navbar() {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {mobileOpen ? (
+            <X className="h-6 w-6" weight="bold" aria-hidden />
+          ) : (
+            <List className="h-6 w-6" weight="bold" aria-hidden />
+          )}
         </button>
       </div>
     </motion.header>

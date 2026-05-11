@@ -28,8 +28,7 @@ export const PHOTO_URLS = {
   },
   /** Team section hero image (`public/team.png`) */
   teamAccent: "/team.png",
-  teamHeadshot:
-    "https://a.espncdn.com/combiner/i?img=/i/headshots/college-football/players/full/4393474.png",
+  teamHeadshot: "/coleman-headshot.png",
   /** Local headshot (`public/grayheadshot.png`) */
   teamGraysonAvatar: "/grayheadshot.png",
 };

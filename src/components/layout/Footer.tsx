@@ -1,6 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { BriefcaseBusiness, Globe, Mail, Phone } from "lucide-react";
+import {
+  Envelope,
+  FacebookLogo,
+  InstagramLogo,
+  LinkedinLogo,
+  Phone,
+} from "@phosphor-icons/react";
 import QuoteRequestForm from "@/components/ui/QuoteRequestForm";
 
 export default function Footer() {
@@ -29,10 +37,12 @@ export default function Footer() {
             <h3 className="font-display text-2xl text-brand-darkGreen">Contact Phones</h3>
             <ul className="mt-4 space-y-2 text-sm text-brand-muted">
               <li className="flex items-center gap-2">
-                <Phone size={16} className="shrink-0 text-brand-midGreen" aria-hidden /> Coleman 954-774-9170
+                <Phone size={16} className="shrink-0 text-brand-midGreen" weight="duotone" aria-hidden />
+                Coleman 954-774-9170
               </li>
               <li className="flex items-center gap-2">
-                <Phone size={16} className="shrink-0 text-brand-midGreen" aria-hidden /> Grayson 954-774-9169
+                <Phone size={16} className="shrink-0 text-brand-midGreen" weight="duotone" aria-hidden />
+                Grayson 954-774-9169
               </li>
             </ul>
           </div>
@@ -51,7 +61,7 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-brand-darkGreen">Contact Us</h3>
             <p className="mt-4 flex items-center gap-2 text-sm text-brand-muted">
-              <Mail size={16} className="shrink-0 text-brand-midGreen" aria-hidden />
+              <Envelope size={16} className="shrink-0 text-brand-midGreen" weight="duotone" aria-hidden />
               coleman@evergreensolutionsfl.com
             </p>
             <Link
@@ -66,7 +76,7 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="rounded-full bg-brand-darkGreen/10 p-2 text-brand-darkGreen hover:bg-brand-darkGreen/15"
               >
-                <Globe size={16} />
+                <FacebookLogo size={16} weight="duotone" aria-hidden />
               </Link>
               <Link
                 href="https://www.instagram.com/evergreensolutionsfl/"
@@ -75,28 +85,14 @@ export default function Footer() {
                 aria-label="Evergreen Solutions FL on Instagram (opens in a new tab)"
                 className="rounded-full bg-brand-darkGreen/10 p-2 text-brand-darkGreen hover:bg-brand-darkGreen/15"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
-                  <circle cx="12" cy="12" r="4" />
-                  <circle cx="17.5" cy="6.5" r="1" />
-                </svg>
+                <InstagramLogo size={16} weight="duotone" aria-hidden />
               </Link>
               <Link
                 href="#"
                 aria-label="LinkedIn"
                 className="rounded-full bg-brand-darkGreen/10 p-2 text-brand-darkGreen hover:bg-brand-darkGreen/15"
               >
-                <BriefcaseBusiness size={16} />
+                <LinkedinLogo size={16} weight="duotone" aria-hidden />
               </Link>
             </div>
           </div>

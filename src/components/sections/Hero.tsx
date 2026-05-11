@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 import { PHOTO_URLS } from "@/lib/constants";
@@ -57,14 +56,6 @@ export default function Hero() {
             Case Studies
           </Button>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/80"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 1.4, repeat: Number.POSITIVE_INFINITY }}
-      >
-        <ChevronDown />
       </motion.div>
     </section>
   );
