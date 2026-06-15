@@ -10,7 +10,7 @@ const STEPS = ["You plan it", "You send it", "We build it"];
 
 export default function NtrLvrSection() {
   return (
-    <section id="ntr-lvr" className="section-padding bg-brand-cream">
+    <section id="ntr-lvr" className="section-padding overflow-x-clip bg-brand-cream">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -26,8 +26,8 @@ export default function NtrLvrSection() {
 
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.08 }}
             className="order-1 flex justify-center lg:order-2 lg:justify-end"
@@ -36,8 +36,8 @@ export default function NtrLvrSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
             className="order-2 lg:order-1"

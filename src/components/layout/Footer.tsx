@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer
       id="request-quote"
-      className="border-t border-brand-darkGreen/10 bg-brand-sand py-10 text-brand-dark sm:py-14"
+      className="overflow-x-clip border-t border-brand-darkGreen/10 bg-brand-sand py-10 text-brand-dark sm:py-14"
     >
       <div className="container">
         <QuoteRequestForm />

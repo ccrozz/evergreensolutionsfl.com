@@ -271,7 +271,7 @@ export default function Hero() {
         <div className="relative max-w-xl sm:max-w-none">
           <div className="relative">
             <div
-              className="pointer-events-none absolute -inset-x-4 top-0 bottom-[calc(-1*max(1.75rem,env(safe-area-inset-bottom,0px)))] -z-10 bg-gradient-to-b from-transparent via-black/30 to-black/65 sm:hidden"
+              className="pointer-events-none absolute inset-x-0 top-0 bottom-[calc(-1*max(1.75rem,env(safe-area-inset-bottom,0px)))] -z-10 bg-gradient-to-b from-transparent via-black/30 to-black/65 sm:hidden"
               aria-hidden
             />
             <motion.div variants={itemVariants}>

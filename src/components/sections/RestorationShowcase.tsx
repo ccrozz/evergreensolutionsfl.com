@@ -19,12 +19,12 @@ export default function RestorationShowcase() {
   }
 
   return (
-    <section id="restoration" className="section-padding bg-brand-sand">
+    <section id="restoration" className="section-padding overflow-x-clip bg-brand-sand">
       <div className="container">
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="order-2 lg:order-1"
@@ -51,8 +51,8 @@ export default function RestorationShowcase() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
             className="order-1 lg:order-2"
@@ -73,11 +73,12 @@ export default function RestorationShowcase() {
               </span>
             </p>
 
-            <div
-              role="tablist"
-              aria-label="Project scale"
-              className="mobile-tab-scroll mt-6 sm:mt-8"
-            >
+            <div className="mobile-tab-bleed mt-6 sm:mt-8">
+              <div
+                role="tablist"
+                aria-label="Project scale"
+                className="mobile-tab-scroll"
+              >
               {restorationShowcaseCategories.map((entry, index) => {
                 const isActive = categoryIndex === index;
                 return (
@@ -100,14 +101,16 @@ export default function RestorationShowcase() {
                   </button>
                 );
               })}
+              </div>
             </div>
 
             {showItemTabs ? (
-              <div
-                role="tablist"
-                aria-label={`${category.label} project type`}
-                className="mobile-tab-scroll mt-3"
-              >
+              <div className="mobile-tab-bleed mt-3">
+                <div
+                  role="tablist"
+                  aria-label={`${category.label} project type`}
+                  className="mobile-tab-scroll"
+                >
                 {category.items.map((item, index) => {
                   const isActive = itemIndex === index;
                   return (
@@ -130,6 +133,7 @@ export default function RestorationShowcase() {
                     </button>
                   );
                 })}
+                </div>
               </div>
             ) : null}
 

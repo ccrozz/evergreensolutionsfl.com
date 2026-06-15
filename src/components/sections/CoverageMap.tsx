@@ -27,12 +27,12 @@ const regions = [
 
 export default function CoverageMap() {
   return (
-    <section id="about-us" className="section-padding bg-brand-sand">
+    <section id="about-us" className="section-padding overflow-x-clip bg-brand-sand">
       <div className="container">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
             className="order-2 flex flex-col justify-center rounded-2xl bg-white p-5 shadow-soft sm:p-8 lg:order-1 lg:p-10"
@@ -77,8 +77,8 @@ export default function CoverageMap() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
             className="order-1 lg:order-2"

@@ -19,7 +19,7 @@ const item = {
 
 export default function ServicesStrip() {
   return (
-    <section id="services" className="section-padding bg-brand-cream">
+    <section id="services" className="section-padding overflow-x-clip bg-brand-cream">
       <div className="container">
         <SectionHeading
           eyebrow="Services"

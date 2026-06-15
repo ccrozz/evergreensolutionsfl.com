@@ -9,7 +9,7 @@ import { PHOTO_URLS } from "@/lib/constants";
 
 export default function TeamSection() {
   return (
-    <section id="team" className="section-padding bg-brand-cream">
+    <section id="team" className="section-padding overflow-x-clip bg-brand-cream">
       <div className="container">
         <SectionHeading eyebrow="Meet The Team" title="Field Leadership You Can Trust" />
         <div className="mt-10 grid gap-8 lg:grid-cols-2">

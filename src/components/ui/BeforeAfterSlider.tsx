@@ -83,7 +83,7 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full cursor-ew-resize touch-none select-none overflow-hidden bg-brand-sand shadow-soft ring-1 ring-brand-darkGreen/10 ${
+      className={`relative w-full cursor-ew-resize touch-none select-none overflow-hidden overscroll-x-contain bg-brand-sand shadow-soft ring-1 ring-brand-darkGreen/10 ${
         large
           ? "aspect-[4/3] min-h-[300px] rounded-3xl sm:min-h-[380px] lg:min-h-[480px]"
           : compact

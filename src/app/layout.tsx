@@ -4,7 +4,6 @@ import { DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { PHOTO_URLS } from "@/lib/constants";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -20,6 +19,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://evergreensolutionsfl.com"),
   title: "Evergreen Solutions FL | Ecological Restoration Florida",
   description:
     "Leading ecological restoration, sustainable land management, and invasive species control to preserve Florida's unique ecosystems. Native solutions for a flourishing future.",
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
       "Nature's Infinite Solutions — ecological restoration, land management, and habitat consulting across Florida.",
     images: [
       {
-        url: PHOTO_URLS.hero.replace("w=1920&q=85", "w=1200&q=80"),
-        width: 1200,
-        height: 630,
-        alt: "Native Florida wetland landscape with pond, ferns, and swamp forest",
+        url: "/og-image.png",
+        width: 1024,
+        height: 558,
+        alt: "Evergreen Solutions FL — Nature's Infinite Solutions",
       },
     ],
-    url: "https://evergreensolsfl.com",
+    url: "https://evergreensolutionsfl.com",
     siteName: "Evergreen Solutions FL",
     locale: "en_US",
     type: "website",
@@ -51,6 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Evergreen Solutions FL",
     description: "Restoring Florida, One Landscape at a Time.",
+    images: ["/og-image.png"],
   },
   icons: {
     icon: [{ url: "/logo.png", type: "image/png" }],
@@ -73,7 +74,7 @@ export default function RootLayout({
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="min-h-screen">
         <Navbar />
-        <main>{children}</main>
+        <main className="overflow-x-clip">{children}</main>
         <Footer />
         <Analytics />
       </body>

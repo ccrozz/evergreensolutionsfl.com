@@ -7,7 +7,7 @@ import { caseStudies } from "@/lib/data/caseStudies";
 
 export default function CaseStudies() {
   return (
-    <section id="case-studies" className="section-padding bg-white">
+    <section id="case-studies" className="section-padding overflow-x-clip bg-white">
       <div className="container">
         <SectionHeading
           eyebrow="Case studies"

@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 
 export default function CtaBand() {
   return (
-    <section className="bg-brand-darkGreen px-4 py-12 text-white sm:py-16">
+    <section className="overflow-x-clip bg-brand-darkGreen px-4 py-12 text-white sm:py-16">
       <div className="container text-center">
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">Ready to Restore Your Land?</h2>
         <p className="mx-auto mt-3 max-w-2xl text-base text-white/80 sm:mt-4 sm:text-lg">
