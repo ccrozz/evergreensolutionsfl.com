@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
 import {
   HERO_POSTER_SRC,
@@ -16,13 +16,14 @@ const heroVariants = {
 };
 
 const heroVideoClass =
-  "absolute inset-0 z-[1] h-full w-full object-cover object-[center_35%] sm:object-center";
+  "absolute inset-0 z-[1] h-full w-full object-cover object-[center_35%]";
+
+type HeroViewport = "mobile" | "desktop";
 
 export default function Hero() {
-  const mobileVideoRef = useRef<HTMLVideoElement>(null);
-  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const [showVideo, setShowVideo] = useState(false);
+  const [viewport, setViewport] = useState<HeroViewport | null>(null);
 
   const itemVariants = prefersReducedMotion
     ? {
@@ -34,130 +35,64 @@ export default function Hero() {
         show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
       };
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
+  const videoSrc =
+    viewport === "desktop" ? HERO_VIDEO_LOOP_SRC : HERO_VIDEO_SRC;
 
+  useLayoutEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
-
-    function activeVideo() {
-      return mq.matches ? mobileVideoRef.current : desktopVideoRef.current;
+    function syncViewport() {
+      setViewport(mq.matches ? "mobile" : "desktop");
     }
+    syncViewport();
+    mq.addEventListener("change", syncViewport);
+    return () => mq.removeEventListener("change", syncViewport);
+  }, []);
 
-    function revealVideo() {
-      setShowVideo(true);
-    }
+  useEffect(() => {
+    if (prefersReducedMotion || !viewport) return;
 
-    function startPlayback() {
-      const video = activeVideo();
-      if (!video) return;
-      video.muted = true;
-      void video.play().catch(() => {
-        /* Autoplay blocked — poster stays visible */
-      });
-    }
+    const video = videoRef.current;
+    if (!video) return;
 
-    function onPlaying() {
-      revealVideo();
-    }
-
-    function onCanPlayThrough() {
-      revealVideo();
-      startPlayback();
-    }
-
-    function attach(video: HTMLVideoElement | null) {
-      if (!video) return () => {};
-
-      video.addEventListener("playing", onPlaying);
-      video.addEventListener("canplaythrough", onCanPlayThrough);
-
-      if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
-        onCanPlayThrough();
-      } else {
-        video.load();
-      }
-
-      return () => {
-        video.removeEventListener("playing", onPlaying);
-        video.removeEventListener("canplaythrough", onCanPlayThrough);
-      };
-    }
-
-    let cleanupMobile = attach(mobileVideoRef.current);
-    let cleanupDesktop = attach(desktopVideoRef.current);
-
-    function onBreakpointChange() {
-      cleanupMobile?.();
-      cleanupDesktop?.();
-      setShowVideo(false);
-      cleanupMobile = attach(mobileVideoRef.current);
-      cleanupDesktop = attach(desktopVideoRef.current);
-    }
-
-    mq.addEventListener("change", onBreakpointChange);
-
-    return () => {
-      cleanupMobile?.();
-      cleanupDesktop?.();
-      mq.removeEventListener("change", onBreakpointChange);
-    };
-  }, [prefersReducedMotion]);
+    video.muted = true;
+    void video.play().catch(() => {
+      /* Autoplay blocked */
+    });
+  }, [prefersReducedMotion, viewport, videoSrc]);
 
   return (
     <section
       id="home"
-      className="relative flex min-h-[100dvh] min-h-screen w-full max-w-full items-end overflow-hidden bg-brand-darkGreen sm:items-center"
+      className="relative flex min-h-[100dvh] min-h-screen w-full max-w-full items-end overflow-hidden bg-black"
     >
-      <Image
-        src={HERO_POSTER_SRC}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className={`z-0 object-cover object-[center_35%] transition-opacity duration-700 sm:object-center ${
-          showVideo ? "opacity-0" : "opacity-100"
-        }`}
-        quality={80}
-        aria-hidden
-      />
-
-      {!prefersReducedMotion ? (
-        <>
-          <video
-            ref={mobileVideoRef}
-            src={HERO_VIDEO_SRC}
-            className={`${heroVideoClass} transition-opacity duration-700 sm:hidden ${
-              showVideo ? "opacity-100" : "opacity-0"
-            }`}
-            autoPlay
-            muted
-            playsInline
-            loop
-            preload="auto"
-            aria-hidden
-          />
-          <video
-            ref={desktopVideoRef}
-            src={HERO_VIDEO_LOOP_SRC}
-            className={`${heroVideoClass} transition-opacity duration-700 max-sm:hidden ${
-              showVideo ? "opacity-100" : "opacity-0"
-            }`}
-            autoPlay
-            muted
-            playsInline
-            loop
-            preload="auto"
-            aria-hidden
-          />
-        </>
+      {prefersReducedMotion ? (
+        <Image
+          src={HERO_POSTER_SRC}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="z-0 object-cover object-[center_35%]"
+          quality={80}
+          aria-hidden
+        />
+      ) : viewport ? (
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          src={videoSrc}
+          className={heroVideoClass}
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="auto"
+          aria-hidden
+        />
       ) : null}
 
       <div
-        className="pointer-events-none absolute inset-0 z-[2] hidden bg-gradient-to-t from-brand-darkGreen/60 via-brand-darkGreen/20 to-brand-darkGreen/5 sm:block"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[min(58%,22rem)] bg-gradient-to-t from-black/70 from-0% via-black/40 via-45% to-transparent to-100% sm:hidden"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[min(58%,24rem)] bg-gradient-to-t from-black/70 from-0% via-black/40 via-45% to-transparent to-100%"
         aria-hidden
       />
       <div
@@ -169,14 +104,14 @@ export default function Hero() {
         variants={heroVariants}
         initial={prefersReducedMotion ? false : "hidden"}
         animate="show"
-        className="container relative z-10 w-full pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:pb-16 sm:pt-[calc(4.25rem+env(safe-area-inset-top,0px))]"
+        className="container relative z-10 w-full pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:pb-10 sm:pt-0"
       >
-        <div className="relative max-w-xl sm:max-w-none">
+        <div className="relative max-w-xl lg:max-w-3xl">
           <div className="relative">
             <motion.div variants={itemVariants}>
-              <h1 className="text-shadow-hero font-display text-[1.625rem] font-bold leading-[1.08] tracking-tight text-white sm:max-w-4xl sm:text-4xl sm:leading-[1.1] md:text-7xl">
-                <span className="block sm:inline">EVERGREEN</span>{" "}
-                <span className="block sm:inline">SOLUTIONS FL</span>
+              <h1 className="text-shadow-hero font-display text-[1.625rem] font-bold leading-[1.08] tracking-tight text-white sm:text-4xl sm:leading-[1.1] md:text-6xl lg:text-7xl">
+                <span className="block">EVERGREEN</span>{" "}
+                <span className="block">SOLUTIONS FL</span>
               </h1>
             </motion.div>
             <motion.div variants={itemVariants}>
