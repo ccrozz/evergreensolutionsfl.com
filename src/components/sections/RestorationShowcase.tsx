@@ -21,7 +21,7 @@ export default function RestorationShowcase() {
   return (
     <section id="restoration" className="section-padding bg-brand-sand">
       <div className="container">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -60,20 +60,23 @@ export default function RestorationShowcase() {
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-midGreen">
               See the difference
             </p>
-            <h2 className="font-display text-3xl text-brand-darkGreen sm:text-4xl">
+            <h2 className="font-display text-2xl leading-tight text-brand-darkGreen sm:text-3xl lg:text-4xl">
               Restoration that{" "}
               <em className="italic text-brand-midGreen">feeds families</em>, not just the lawn.
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-brand-muted">
-              Drag the line to compare. Under Residential, explore edible gardens, food forests,
-              and native plantings. Under Commercial, see wetland buffers, invasive clearing,
-              grazing pasture, and full-acreage restoration.
+            <p className="mt-3 text-sm leading-relaxed text-brand-muted sm:mt-4 sm:text-base">
+              <span className="sm:hidden">Drag to compare before and after. Tap Residential or Commercial to explore.</span>
+              <span className="hidden sm:inline">
+                Drag the line to compare. Under Residential, explore edible gardens, food forests,
+                and native plantings. Under Commercial, see wetland buffers, invasive clearing,
+                grazing pasture, and full-acreage restoration.
+              </span>
             </p>
 
             <div
               role="tablist"
               aria-label="Project scale"
-              className="mt-8 flex flex-wrap gap-2"
+              className="mobile-tab-scroll mt-6 sm:mt-8"
             >
               {restorationShowcaseCategories.map((entry, index) => {
                 const isActive = categoryIndex === index;
@@ -87,7 +90,7 @@ export default function RestorationShowcase() {
                     aria-controls="restoration-slider-panel"
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => selectCategory(index)}
-                    className={`rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 ${
+                    className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-5 ${
                       isActive
                         ? "bg-brand-darkGreen text-white shadow-soft"
                         : "bg-white text-brand-darkGreen ring-1 ring-brand-darkGreen/15 hover:bg-brand-cream"
@@ -103,7 +106,7 @@ export default function RestorationShowcase() {
               <div
                 role="tablist"
                 aria-label={`${category.label} project type`}
-                className="mt-3 flex flex-wrap gap-2"
+                className="mobile-tab-scroll mt-3"
               >
                 {category.items.map((item, index) => {
                   const isActive = itemIndex === index;
@@ -117,7 +120,7 @@ export default function RestorationShowcase() {
                       aria-controls="restoration-slider-panel"
                       tabIndex={isActive ? 0 : -1}
                       onClick={() => setItemIndex(index)}
-                      className={`rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 ${
+                      className={`shrink-0 rounded-full px-3.5 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-4 ${
                         isActive
                           ? "bg-brand-midGreen/15 text-brand-darkGreen ring-1 ring-brand-midGreen/30"
                           : "bg-white/70 text-brand-muted ring-1 ring-brand-darkGreen/10 hover:bg-white hover:text-brand-darkGreen"

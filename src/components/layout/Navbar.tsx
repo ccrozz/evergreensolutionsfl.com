@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { List, X } from "@phosphor-icons/react";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
@@ -17,12 +17,8 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 80));
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -46,9 +42,9 @@ export default function Navbar() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-brand-sand px-6 backdrop-blur-sm lg:hidden"
+        className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-brand-sand/90 px-6 backdrop-blur-md lg:hidden"
         style={{
-          paddingTop: "max(6rem, env(safe-area-inset-top, 0px))",
+          paddingTop: "max(4.5rem, env(safe-area-inset-top, 0px))",
           paddingBottom: "env(safe-area-inset-bottom, 0px)",
         }}
         role="dialog"
@@ -60,7 +56,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-2xl font-semibold text-brand-darkGreen"
+              className="flex min-h-[48px] items-center text-2xl font-semibold text-brand-darkGreen"
               onClick={closeMobile}
             >
               {link.label}
@@ -82,17 +78,13 @@ export default function Navbar() {
       {mounted && mobileOpen ? createPortal(mobileMenu, document.body) : null}
 
       <motion.header
-        className={`fixed inset-x-0 top-0 z-[9999] transition-all duration-300 ${
-          scrolled
-            ? "bg-brand-sand/95 shadow-lg backdrop-blur"
-            : "bg-brand-sand/90 shadow-md backdrop-blur"
-        }`}
+        className="fixed inset-x-0 top-0 z-[9999] border-b border-brand-darkGreen/10 bg-brand-sand/90 shadow-sm backdrop-blur-md sm:bg-brand-sand/75"
         initial={false}
       >
-        <div className="container relative z-50 flex min-h-[4.5rem] items-center justify-between gap-3 py-2 sm:h-24 sm:py-0">
+        <div className="container relative z-50 flex h-14 items-center justify-between gap-2 sm:h-16">
           <Link
             href="#home"
-            className="relative h-12 min-w-0 flex-1 max-w-[calc(100%-3.25rem)] shrink-0 sm:h-20 sm:w-[32rem] sm:max-w-none sm:flex-none lg:w-[40rem]"
+            className="relative h-10 min-w-0 flex-1 max-w-[calc(100%-2.75rem)] shrink-0 sm:h-12 sm:w-[26rem] sm:max-w-none sm:flex-none lg:w-[32rem] xl:w-[36rem]"
             onClick={closeMobile}
           >
             <Image
@@ -105,7 +97,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <nav className="hidden shrink-0 flex-nowrap items-center gap-5 lg:flex xl:gap-6">
+          <nav className="hidden shrink-0 flex-nowrap items-center gap-4 lg:flex xl:gap-5">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -115,7 +107,11 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Button href="#request-quote" variant="primary" className="shrink-0 whitespace-nowrap">
+            <Button
+              href="#request-quote"
+              variant="primary"
+              className="shrink-0 whitespace-nowrap !px-5 !py-2 text-xs sm:text-sm"
+            >
               Request a Quote ▶
             </Button>
           </nav>
@@ -123,7 +119,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="relative z-50 shrink-0 rounded-md p-2 text-brand-darkGreen ring-brand-darkGreen/20 hover:bg-brand-darkGreen/5 focus-visible:outline-none focus-visible:ring-2 lg:hidden"
+            className="relative z-50 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md p-1.5 text-brand-darkGreen ring-brand-darkGreen/20 hover:bg-brand-darkGreen/5 focus-visible:outline-none focus-visible:ring-2 lg:hidden"
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >

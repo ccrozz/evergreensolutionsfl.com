@@ -4,18 +4,23 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
-import { HERO_POSTER_SRC, HERO_VIDEO_SRC } from "@/lib/constants";
+import { HERO_POSTER_SRC, HERO_VIDEO_REVERSE_SRC, HERO_VIDEO_SRC } from "@/lib/constants";
 
 const heroVariants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.15 } },
 };
 
+const heroVideoClass =
+  "absolute inset-0 h-full w-full object-cover object-[center_35%] sm:object-center";
+
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const forwardRef = useRef<HTMLVideoElement>(null);
+  const reverseRef = useRef<HTMLVideoElement>(null);
+  const switchingRef = useRef(false);
   const prefersReducedMotion = useReducedMotion();
   const [videoReady, setVideoReady] = useState(false);
-  const [enableVideo, setEnableVideo] = useState(false);
+  const [playingForward, setPlayingForward] = useState(true);
 
   const itemVariants = prefersReducedMotion
     ? {
@@ -28,67 +33,99 @@ export default function Hero() {
       };
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia("(max-width: 767px)");
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const connection = (
-      navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
-    ).connection;
-    const saveData = connection?.saveData ?? false;
-    const slowNetwork =
-      connection?.effectiveType === "slow-2g" ||
-      connection?.effectiveType === "2g" ||
-      connection?.effectiveType === "3g";
+    if (prefersReducedMotion) return;
 
-    function updateVideoPreference() {
-      const shouldUseVideo =
-        !mobileQuery.matches && !motionQuery.matches && !saveData && !slowNetwork;
-      setEnableVideo(shouldUseVideo);
-      if (!shouldUseVideo) {
-        setVideoReady(false);
-      }
-    }
+    const forward = forwardRef.current;
+    const reverse = reverseRef.current;
+    if (!forward || !reverse) return;
 
-    updateVideoPreference();
-    mobileQuery.addEventListener("change", updateVideoPreference);
-    motionQuery.addEventListener("change", updateVideoPreference);
-    return () => {
-      mobileQuery.removeEventListener("change", updateVideoPreference);
-      motionQuery.removeEventListener("change", updateVideoPreference);
-    };
-  }, []);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !enableVideo) return;
-
-    function handleReady() {
+    function markReady() {
       setVideoReady(true);
     }
 
-    function handleError() {
-      setVideoReady(false);
-      setEnableVideo(false);
+    function handoffToReverse() {
+      if (switchingRef.current) return;
+      switchingRef.current = true;
+
+      setPlayingForward(false);
+      forward.pause();
+      reverse.currentTime = 0;
+      void reverse.play().finally(() => {
+        switchingRef.current = false;
+      });
     }
 
-    video.addEventListener("loadeddata", handleReady);
-    video.addEventListener("canplay", handleReady);
-    video.addEventListener("error", handleError);
+    function handoffToForward() {
+      if (switchingRef.current) return;
+      switchingRef.current = true;
 
-    void video.play().catch(() => {
-      setEnableVideo(false);
-    });
+      setPlayingForward(true);
+      reverse.pause();
+      forward.currentTime = 0;
+      void forward.play().finally(() => {
+        switchingRef.current = false;
+      });
+    }
+
+    function onForwardEnded() {
+      handoffToReverse();
+    }
+
+    function onReverseEnded() {
+      handoffToForward();
+    }
+
+    function onForwardTimeUpdate() {
+      const duration = forward.duration;
+      if (!Number.isFinite(duration) || duration <= 0) return;
+      if (forward.currentTime >= duration - 0.05) {
+        handoffToReverse();
+      }
+    }
+
+    function onReverseTimeUpdate() {
+      const duration = reverse.duration;
+      if (!Number.isFinite(duration) || duration <= 0) return;
+      if (reverse.currentTime >= duration - 0.05) {
+        handoffToForward();
+      }
+    }
+
+    function tryPlay() {
+      switchingRef.current = false;
+      setPlayingForward(true);
+      forward.currentTime = 0;
+      reverse.pause();
+      void forward.play().catch(() => {
+        /* Autoplay blocked — poster image stays visible underneath */
+      });
+    }
+
+    forward.addEventListener("loadeddata", markReady);
+    forward.addEventListener("canplay", markReady);
+    forward.addEventListener("loadedmetadata", tryPlay);
+    forward.addEventListener("ended", onForwardEnded);
+    forward.addEventListener("timeupdate", onForwardTimeUpdate);
+    reverse.addEventListener("ended", onReverseEnded);
+    reverse.addEventListener("timeupdate", onReverseTimeUpdate);
+
+    tryPlay();
 
     return () => {
-      video.removeEventListener("loadeddata", handleReady);
-      video.removeEventListener("canplay", handleReady);
-      video.removeEventListener("error", handleError);
+      forward.removeEventListener("loadeddata", markReady);
+      forward.removeEventListener("canplay", markReady);
+      forward.removeEventListener("loadedmetadata", tryPlay);
+      forward.removeEventListener("ended", onForwardEnded);
+      forward.removeEventListener("timeupdate", onForwardTimeUpdate);
+      reverse.removeEventListener("ended", onReverseEnded);
+      reverse.removeEventListener("timeupdate", onReverseTimeUpdate);
     };
-  }, [enableVideo]);
+  }, [prefersReducedMotion]);
 
   return (
     <section
       id="home"
-      className="relative flex min-h-[100dvh] min-h-screen items-center overflow-hidden bg-brand-darkGreen"
+      className="relative flex min-h-[100dvh] min-h-screen items-end overflow-hidden bg-brand-darkGreen sm:items-center"
     >
       <Image
         src={HERO_POSTER_SRC}
@@ -96,30 +133,47 @@ export default function Hero() {
         fill
         priority
         sizes="100vw"
-        className="object-cover object-center"
+        className="object-cover object-[center_35%] sm:object-center"
         aria-hidden
       />
 
-      {enableVideo ? (
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
-            videoReady ? "opacity-100" : "opacity-0"
-          }`}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={HERO_POSTER_SRC}
-          aria-hidden
-        >
-          <source src={HERO_VIDEO_SRC} type="video/mp4" />
-        </video>
+      {!prefersReducedMotion ? (
+        <>
+          <video
+            ref={forwardRef}
+            className={`${heroVideoClass} transition-opacity duration-700 ${
+              videoReady ? "opacity-100" : "opacity-0"
+            } ${playingForward ? "z-[1]" : "z-0"}`}
+            muted
+            playsInline
+            preload="auto"
+            poster={HERO_POSTER_SRC}
+            aria-hidden
+          >
+            <source src={HERO_VIDEO_SRC} type="video/mp4" />
+          </video>
+          <video
+            ref={reverseRef}
+            className={`${heroVideoClass} transition-opacity duration-700 ${
+              videoReady ? "opacity-100" : "opacity-0"
+            } ${playingForward ? "z-0" : "z-[1]"}`}
+            muted
+            playsInline
+            preload="auto"
+            poster={HERO_POSTER_SRC}
+            aria-hidden
+          >
+            <source src={HERO_VIDEO_REVERSE_SRC} type="video/mp4" />
+          </video>
+        </>
       ) : null}
 
       <div
-        className="absolute inset-0 bg-gradient-to-t from-brand-darkGreen/60 via-brand-darkGreen/20 to-brand-darkGreen/5"
+        className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-brand-darkGreen/60 via-brand-darkGreen/20 to-brand-darkGreen/5 sm:block"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent sm:hidden"
         aria-hidden
       />
 
@@ -127,32 +181,51 @@ export default function Hero() {
         variants={heroVariants}
         initial={prefersReducedMotion ? false : "hidden"}
         animate="show"
-        className="container relative z-10 pb-14 pt-[calc(5.75rem+env(safe-area-inset-top,0px))] sm:pb-16 sm:pt-28"
+        className="container relative z-10 w-full pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:pb-16 sm:pt-[calc(4.25rem+env(safe-area-inset-top,0px))]"
       >
-        <motion.div variants={itemVariants}>
-          <h1 className="max-w-4xl font-display text-4xl font-bold leading-[1.08] text-white sm:text-5xl md:text-7xl">
-            EVERGREEN SOLUTIONS FL
-          </h1>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <p className="mt-3 max-w-3xl font-display text-xl italic leading-snug text-white/90 sm:mt-4 sm:text-3xl md:text-4xl">
-            Restoring Florida, One Landscape at a Time.
-          </p>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:mt-7 sm:text-lg">
-            Providing leading ecological restoration services, sustainable land
-            practices, and invasive species management to preserve Florida&apos;s
-            diverse and unique ecosystems. Native solutions for a flourishing
-            future.
-          </p>
-        </motion.div>
-        <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
-          <Button href="#services">Explore Our Services</Button>
-          <Button href="#case-studies" variant="outline-white">
-            Case Studies
-          </Button>
-        </motion.div>
+        <div className="relative max-w-xl sm:max-w-none">
+          <div className="relative">
+            <div
+              className="pointer-events-none absolute -inset-x-4 top-0 bottom-[calc(-1*max(1.75rem,env(safe-area-inset-bottom,0px)))] -z-10 bg-gradient-to-b from-transparent via-black/30 to-black/65 sm:hidden"
+              aria-hidden
+            />
+            <motion.div variants={itemVariants}>
+              <h1 className="text-shadow-hero font-display text-[1.625rem] font-bold leading-[1.08] tracking-tight text-white sm:max-w-4xl sm:text-4xl sm:leading-[1.1] md:text-7xl">
+                <span className="block sm:inline">EVERGREEN</span>{" "}
+                <span className="block sm:inline">SOLUTIONS FL</span>
+              </h1>
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <p className="text-shadow-hero mt-2.5 max-w-md font-display text-base italic leading-snug text-white sm:mt-4 sm:max-w-3xl sm:text-2xl md:text-4xl">
+                Restoring Florida, One Landscape at a Time.
+              </p>
+            </motion.div>
+            <motion.div variants={itemVariants} className="hidden sm:block">
+              <p className="text-shadow-hero-subtle mt-4 max-w-2xl text-sm leading-relaxed text-white sm:mt-7 sm:text-lg">
+                Leading ecological restoration, sustainable land practices, and invasive
+                species management across Florida.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-10 sm:flex sm:w-auto sm:flex-row sm:flex-wrap sm:gap-4"
+            >
+              <Button
+                href="#services"
+                className="w-full !px-4 !py-2.5 text-xs sm:w-auto sm:!px-8 sm:!py-3 sm:text-sm"
+              >
+                Our Services
+              </Button>
+              <Button
+                href="#case-studies"
+                variant="outline-white"
+                className="w-full !px-4 !py-2.5 text-xs sm:w-auto sm:!px-8 sm:!py-3 sm:text-sm"
+              >
+                Case Studies
+              </Button>
+            </motion.div>
+          </div>
+        </div>
       </motion.div>
     </section>
   );

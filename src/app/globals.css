@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  @apply bg-brand-cream font-body text-brand-dark antialiased;
+  @apply overflow-x-hidden bg-brand-cream font-body text-brand-dark antialiased;
 }
 
 ::selection {
@@ -27,7 +27,41 @@ body {
 }
 
 .section-padding {
-  @apply py-16 md:py-24;
+  @apply py-12 sm:py-16 md:py-24;
+}
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-tab-scroll {
+    @apply -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0;
+  }
+}
+
+.text-shadow-hero {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.45),
+    0 2px 14px rgb(0 0 0 / 0.35);
+}
+
+@media (max-width: 639px) {
+  .text-shadow-hero {
+    text-shadow:
+      0 1px 3px rgb(0 0 0 / 0.65),
+      0 2px 16px rgb(0 0 0 / 0.5),
+      0 4px 32px rgb(0 0 0 / 0.35);
+  }
+}
+
+.text-shadow-hero-subtle {
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
 }
 
 @media (prefers-reduced-motion: reduce) {

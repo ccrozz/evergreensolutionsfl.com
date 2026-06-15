@@ -32,7 +32,7 @@ export default function ServicesStrip() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
         >
           {services.map((service) => (
             <motion.div key={service.title} variants={item}>

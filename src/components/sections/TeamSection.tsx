@@ -18,7 +18,7 @@ export default function TeamSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
-            className="relative min-h-[520px] overflow-hidden rounded-2xl"
+            className="relative min-h-[240px] overflow-hidden rounded-2xl sm:min-h-[380px] lg:min-h-[520px]"
           >
             <Image
               src={PHOTO_URLS.teamAccent}

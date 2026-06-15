@@ -24,32 +24,40 @@ export default function NtrLvrSection() {
           </span>
         </motion.div>
 
-        <div className="grid items-center gap-10 lg:grid-cols-2">
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+            className="order-1 flex justify-center lg:order-2 lg:justify-end"
+          >
+            <NtrLvrPhoneMockup />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
+            className="order-2 lg:order-1"
           >
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-midGreen">
               Our app
             </p>
-            <p className="font-display text-3xl font-semibold text-brand-darkGreen sm:text-4xl">
+            <p className="font-display text-2xl font-semibold text-brand-darkGreen sm:text-3xl lg:text-4xl">
               NTR LVR
             </p>
-            <h2 className="mt-4 font-display text-3xl text-brand-darkGreen sm:text-4xl">
+            <h2 className="mt-3 font-display text-2xl leading-tight text-brand-darkGreen sm:mt-4 sm:text-3xl lg:text-4xl">
               Design your dream landscape.{" "}
               <em className="italic text-brand-midGreen">We come build it.</em>
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-brand-muted">
-              We built NTR LVR so you don&apos;t have to imagine it — you can plan it. Drag
-           plants onto your own plot, lay out beds and buffers, and see how it comes
-              together, all backed by our 20,000+ plant species database. When you&apos;ve got something you
-              love, send it to us with one tap. Your plan becomes the starting point for a real site
-              visit and a real crew.
+            <p className="mt-3 text-sm leading-relaxed text-brand-muted sm:mt-4 sm:text-base">
+              Plan your plot in NTR LVR — drag plants onto your land, lay out beds and buffers,
+              and send us the plan with one tap when you&apos;re ready for a site visit.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.12em] text-brand-muted">
+            <div className="mt-6 flex flex-col gap-2 text-xs font-medium uppercase tracking-[0.12em] text-brand-muted sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
               {STEPS.map((step, index) => (
                 <span key={step} className="flex items-center gap-2">
                   {index > 0 ? (
@@ -69,7 +77,7 @@ export default function NtrLvrSection() {
                 href={NTR_LVR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-brand-darkGreen px-8 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-[#2E7D32] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-leafGreen focus-visible:ring-offset-2"
+                className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-brand-darkGreen px-8 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-[#2E7D32] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-leafGreen focus-visible:ring-offset-2 sm:w-auto"
               >
                 Open NTR LVR
                 <ArrowSquareOut size={18} weight="bold" aria-hidden />
@@ -82,19 +90,9 @@ export default function NtrLvrSection() {
               </Link>
             </div>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.08 }}
-            className="flex justify-center lg:justify-end"
-          >
-            <NtrLvrPhoneMockup />
-          </motion.div>
         </div>
 
-        <p className="mt-14 text-center text-xs text-brand-muted">
+        <p className="mt-10 text-center text-xs text-brand-muted sm:mt-14">
           NTR LVR is built and maintained by Evergreen Solutions FL ·{" "}
           <a
             href={NTR_LVR_URL}

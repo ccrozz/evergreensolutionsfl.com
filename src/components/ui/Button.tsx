@@ -30,7 +30,7 @@ export default function Button({
   return (
     <Link
       href={href}
-      className={`inline-flex cursor-pointer items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${variantClasses[variant]} ${className}`}
+      className={`inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${variantClasses[variant]} ${className}`}
     >
       {children}
     </Link>

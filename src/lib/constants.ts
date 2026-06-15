@@ -45,7 +45,10 @@ export const PHOTO_URLS = {
 /** Local hero poster — always shown instantly; video layers on top when ready */
 export const HERO_POSTER_SRC = "/hero-poster.jpg";
 
-/** Hero background clip (trimmed from site screen recording, 4s–15s) */
+/** Hero background — forward clip; pairs with reverse for ping-pong playback */
 export const HERO_VIDEO_SRC = "/hero-video.mp4";
+
+/** Reversed hero clip — plays after forward ends for seamless pan back */
+export const HERO_VIDEO_REVERSE_SRC = "/hero-video-reverse.mp4";
 
 export const NTR_LVR_URL = "https://ntrlvr.com";

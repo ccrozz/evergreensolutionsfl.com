@@ -14,9 +14,9 @@ export default function CaseStudies() {
           title="Stories from Florida Extension work"
           description="These highlights follow themes reported by UF/IFAS Extension—water savings, nutrient BMPs, and stewardship on real Florida farms and wetlands. Open a card to read the full IFAS article."
           centered
-          titleClassName="text-5xl"
+          titleClassName="text-3xl sm:text-4xl lg:text-5xl"
         />
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-6 lg:grid-cols-3">
           {caseStudies.map((study, index) => (
             <motion.div
               key={study.title}

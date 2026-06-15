@@ -88,7 +88,7 @@ export default function BeforeAfterSlider({
           ? "aspect-[4/3] min-h-[300px] rounded-3xl sm:min-h-[380px] lg:min-h-[480px]"
           : compact
             ? "aspect-[16/10] max-h-[280px] rounded-2xl sm:max-h-[310px] lg:max-h-[340px]"
-            : "aspect-[16/10] rounded-2xl"
+            : "aspect-[16/10] min-h-[220px] rounded-2xl sm:min-h-0"
       } ${className}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -144,14 +144,14 @@ export default function BeforeAfterSlider({
 
       <div
         className={`pointer-events-none absolute top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-brand-leafGreen text-white shadow-lg ${
-          large ? "h-14 w-14" : "h-10 w-10"
+          large ? "h-14 w-14" : "h-12 w-12 sm:h-10 sm:w-10"
         }`}
         style={{ left: `${position}%` }}
         aria-hidden
       >
         <svg
-          width={large ? 24 : 18}
-          height={large ? 24 : 18}
+          width={large ? 24 : 20}
+          height={large ? 24 : 20}
           viewBox="0 0 20 20"
           fill="none"
           aria-hidden

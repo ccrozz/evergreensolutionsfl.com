@@ -21,13 +21,13 @@ export default function SectionHeading({
         </p>
       ) : null}
       <h2
-        className={`font-display text-3xl text-brand-darkGreen sm:text-4xl ${titleClassName}`}
+        className={`font-display text-2xl text-brand-darkGreen sm:text-3xl md:text-4xl ${titleClassName}`}
       >
         {title}
       </h2>
       {description ? (
         <p
-          className={`mt-4 max-w-2xl text-base leading-relaxed text-brand-muted ${
+          className={`mt-3 max-w-2xl text-sm leading-relaxed text-brand-muted sm:mt-4 sm:text-base ${
             centered ? "mx-auto" : ""
           }`}
         >
