@@ -55,3 +55,6 @@ export const HERO_VIDEO_REVERSE_SRC = "/hero-video-reverse.mp4";
 export const HERO_VIDEO_LOOP_SRC = "/hero-video-loop.mp4";
 
 export const NTR_LVR_URL = "https://ntrlvr.com";
+
+/** NTR LVR app screenshot for the phone mockup on the marketing site */
+export const NTR_LVR_SCREENSHOT_SRC = "/ntrlvr-screenshot.png";
