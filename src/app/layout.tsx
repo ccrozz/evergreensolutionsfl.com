@@ -1,15 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import { DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import AnalyticsLazy from "@/components/layout/AnalyticsLazy";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
   weight: ["400", "600", "700"],
+  preload: true,
 });
 
 const dmSans = DM_Sans({
@@ -76,7 +77,7 @@ export default function RootLayout({
         <Navbar />
         <main className="overflow-x-clip">{children}</main>
         <Footer />
-        <Analytics />
+        <AnalyticsLazy />
       </body>
     </html>
   );

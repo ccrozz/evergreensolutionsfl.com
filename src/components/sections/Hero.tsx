@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
 import {
   HERO_POSTER_SRC,
-  HERO_VIDEO_LOOP_SRC,
   HERO_VIDEO_REVERSE_SRC,
   HERO_VIDEO_SRC,
 } from "@/lib/constants";
@@ -29,8 +28,9 @@ export default function Hero() {
   const forwardRef = useRef<HTMLVideoElement>(null);
   const reverseRef = useRef<HTMLVideoElement>(null);
   const switchingRef = useRef(false);
+  const initStartedRef = useRef(false);
   const prefersReducedMotion = useReducedMotion();
-  const [mediaPlaying, setMediaPlaying] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const [playingForward, setPlayingForward] = useState(true);
 
   const itemVariants = prefersReducedMotion
@@ -46,38 +46,46 @@ export default function Hero() {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    initStartedRef.current = false;
     const mq = window.matchMedia("(max-width: 639px)");
+    let cancelled = false;
 
-    function markPlaying() {
-      setMediaPlaying(true);
+    function revealVideo() {
+      if (!cancelled) setShowVideo(true);
     }
 
     function setupMobile() {
       const video = mobileVideoRef.current;
       if (!video) return () => {};
 
-      function onPlaying() {
-        markPlaying();
-      }
-
-      function attemptPlay() {
+      function startPlayback() {
         const video = mobileVideoRef.current;
-        if (!video) return;
+        if (!video || initStartedRef.current) return;
+        initStartedRef.current = true;
         void tryPlayVideo(video).catch(() => {
-          /* Autoplay blocked — poster stays visible */
+          initStartedRef.current = false;
         });
       }
 
-      video.addEventListener("playing", onPlaying);
-      video.addEventListener("canplay", attemptPlay);
-      video.addEventListener("loadeddata", attemptPlay);
+      function onPlaying() {
+        revealVideo();
+      }
 
-      attemptPlay();
+      function onCanPlay() {
+        revealVideo();
+        startPlayback();
+      }
+
+      video.addEventListener("playing", onPlaying);
+      video.addEventListener("canplay", onCanPlay);
+
+      if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        onCanPlay();
+      }
 
       return () => {
         video.removeEventListener("playing", onPlaying);
-        video.removeEventListener("canplay", attemptPlay);
-        video.removeEventListener("loadeddata", attemptPlay);
+        video.removeEventListener("canplay", onCanPlay);
       };
     }
 
@@ -142,35 +150,43 @@ export default function Hero() {
         }
       }
 
-      function attemptPlay() {
-        const fwd = forwardRef.current;
-        const rev = reverseRef.current;
-        if (!fwd || !rev) return;
+      function startPlayback() {
+        const forward = forwardRef.current;
+        const reverse = reverseRef.current;
+        if (!forward || !reverse || initStartedRef.current) return;
+        initStartedRef.current = true;
         switchingRef.current = false;
         setPlayingForward(true);
-        fwd.currentTime = 0;
-        rev.pause();
-        void tryPlayVideo(fwd).catch(() => {
-          /* Autoplay blocked — poster stays visible */
+        forward.currentTime = 0;
+        reverse.pause();
+        void tryPlayVideo(forward).catch(() => {
+          initStartedRef.current = false;
         });
       }
 
-      forward.addEventListener("playing", markPlaying);
-      forward.addEventListener("canplay", attemptPlay);
-      forward.addEventListener("loadeddata", attemptPlay);
-      forward.addEventListener("loadedmetadata", attemptPlay);
+      function onCanPlay() {
+        revealVideo();
+        startPlayback();
+      }
+
+      function onPlaying() {
+        revealVideo();
+      }
+
+      forward.addEventListener("canplay", onCanPlay);
+      forward.addEventListener("playing", onPlaying);
       forward.addEventListener("ended", onForwardEnded);
       forward.addEventListener("timeupdate", onForwardTimeUpdate);
       reverse.addEventListener("ended", onReverseEnded);
       reverse.addEventListener("timeupdate", onReverseTimeUpdate);
 
-      attemptPlay();
+      if (forward.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        onCanPlay();
+      }
 
       return () => {
-        forward.removeEventListener("playing", markPlaying);
-        forward.removeEventListener("canplay", attemptPlay);
-        forward.removeEventListener("loadeddata", attemptPlay);
-        forward.removeEventListener("loadedmetadata", attemptPlay);
+        forward.removeEventListener("canplay", onCanPlay);
+        forward.removeEventListener("playing", onPlaying);
         forward.removeEventListener("ended", onForwardEnded);
         forward.removeEventListener("timeupdate", onForwardTimeUpdate);
         reverse.removeEventListener("ended", onReverseEnded);
@@ -178,19 +194,50 @@ export default function Hero() {
       };
     }
 
-    let cleanup = mq.matches ? setupMobile() : setupDesktop();
+    function attachPlayback() {
+      if (cancelled) return;
+      initStartedRef.current = false;
+      return mq.matches ? setupMobile() : setupDesktop();
+    }
+
+    let cleanup = attachPlayback();
+
+    function waitForDesktopVideos(attempt = 0) {
+      if (cancelled || mq.matches) return;
+
+      const forward = forwardRef.current;
+      const reverse = reverseRef.current;
+      if (forward && reverse) {
+        cleanup?.();
+        cleanup = setupDesktop();
+        return;
+      }
+
+      if (attempt < 20) {
+        requestAnimationFrame(() => waitForDesktopVideos(attempt + 1));
+      }
+    }
+
+    if (!mq.matches && !forwardRef.current) {
+      waitForDesktopVideos();
+    }
 
     function onBreakpointChange(event: MediaQueryListEvent) {
-      cleanup();
-      setMediaPlaying(false);
+      cleanup?.();
+      setShowVideo(false);
       setPlayingForward(true);
-      cleanup = event.matches ? setupMobile() : setupDesktop();
+      initStartedRef.current = false;
+      cleanup = attachPlayback();
+      if (!event.matches && !forwardRef.current) {
+        waitForDesktopVideos();
+      }
     }
 
     mq.addEventListener("change", onBreakpointChange);
 
     return () => {
-      cleanup();
+      cancelled = true;
+      cleanup?.();
       mq.removeEventListener("change", onBreakpointChange);
     };
   }, [prefersReducedMotion]);
@@ -207,8 +254,9 @@ export default function Hero() {
         priority
         sizes="100vw"
         className={`z-0 object-cover object-[center_35%] transition-opacity duration-700 sm:object-center ${
-          mediaPlaying ? "opacity-0" : "opacity-100"
+          showVideo ? "opacity-0" : "opacity-100"
         }`}
+        quality={80}
         aria-hidden
       />
 
@@ -216,38 +264,38 @@ export default function Hero() {
         <>
           <video
             ref={mobileVideoRef}
-            src={HERO_VIDEO_LOOP_SRC}
+            src={HERO_VIDEO_SRC}
             className={`${heroVideoClass} transition-opacity duration-700 sm:hidden ${
-              mediaPlaying ? "opacity-100" : "opacity-0"
+              showVideo ? "opacity-100" : "opacity-0"
             }`}
             autoPlay
             muted
             playsInline
             loop
-            preload="auto"
+            preload="metadata"
             aria-hidden
           />
           <video
             ref={forwardRef}
             src={HERO_VIDEO_SRC}
-            className={`${heroVideoClass} hidden transition-opacity duration-700 sm:block ${
-              mediaPlaying ? "opacity-100" : "opacity-0"
+            className={`${heroVideoClass} transition-opacity duration-700 max-sm:hidden ${
+              showVideo ? "opacity-100" : "opacity-0"
             } ${playingForward ? "z-[1]" : "z-0"}`}
             autoPlay
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden
           />
           <video
             ref={reverseRef}
             src={HERO_VIDEO_REVERSE_SRC}
-            className={`${heroVideoClass} hidden transition-opacity duration-700 sm:block ${
-              mediaPlaying ? "opacity-100" : "opacity-0"
+            className={`${heroVideoClass} transition-opacity duration-700 max-sm:hidden ${
+              showVideo ? "opacity-100" : "opacity-0"
             } ${playingForward ? "z-0" : "z-[1]"}`}
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden
           />
         </>

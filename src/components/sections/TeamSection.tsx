@@ -26,6 +26,8 @@ export default function TeamSection() {
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              quality={80}
+              loading="lazy"
             />
           </motion.div>
           <div className="grid gap-4">

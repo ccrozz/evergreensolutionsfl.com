@@ -20,7 +20,15 @@ export default function CaseStudyCard({
   const body = (
     <>
       <div className="relative h-52">
-        <Image src={image} alt={alt} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
+        <Image
+          src={image}
+          alt={alt}
+          fill
+          sizes="(max-width: 1024px) 100vw, 33vw"
+          className="object-cover"
+          quality={80}
+          loading="lazy"
+        />
       </div>
       <div className="p-6">
         <span className="rounded-full bg-brand-leafGreen/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-leafGreen">

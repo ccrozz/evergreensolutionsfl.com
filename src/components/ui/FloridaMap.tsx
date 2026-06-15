@@ -35,7 +35,8 @@ export default function FloridaMap({ className = "" }: FloridaMapProps) {
         fill
         sizes="(max-width: 1024px) 100vw, 560px"
         className="object-cover"
-        quality={95}
+        quality={75}
+        loading="lazy"
       />
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />

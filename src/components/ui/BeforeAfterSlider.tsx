@@ -109,6 +109,7 @@ export default function BeforeAfterSlider({
         sizes="(max-width: 1024px) 100vw, 1200px"
         className={imageClassName}
         priority={priority}
+        quality={80}
         draggable={false}
       />
 
@@ -128,6 +129,8 @@ export default function BeforeAfterSlider({
                 ? "brightness-[0.38] contrast-125 saturate-[0.45]"
                 : ""
             }`}
+            quality={80}
+            loading={priority ? undefined : "lazy"}
             draggable={false}
           />
           {usesFilteredDuplicate ? (
