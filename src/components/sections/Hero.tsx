@@ -4,7 +4,12 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
-import { HERO_POSTER_SRC, HERO_VIDEO_REVERSE_SRC, HERO_VIDEO_SRC } from "@/lib/constants";
+import {
+  HERO_POSTER_SRC,
+  HERO_VIDEO_LOOP_SRC,
+  HERO_VIDEO_REVERSE_SRC,
+  HERO_VIDEO_SRC,
+} from "@/lib/constants";
 
 const heroVariants = {
   hidden: {},
@@ -12,14 +17,20 @@ const heroVariants = {
 };
 
 const heroVideoClass =
-  "absolute inset-0 h-full w-full object-cover object-[center_35%] sm:object-center";
+  "absolute inset-0 z-[1] h-full w-full object-cover object-[center_35%] sm:object-center";
+
+function tryPlayVideo(video: HTMLVideoElement) {
+  video.muted = true;
+  return video.play();
+}
 
 export default function Hero() {
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
   const forwardRef = useRef<HTMLVideoElement>(null);
   const reverseRef = useRef<HTMLVideoElement>(null);
   const switchingRef = useRef(false);
   const prefersReducedMotion = useReducedMotion();
-  const [videoReady, setVideoReady] = useState(false);
+  const [mediaPlaying, setMediaPlaying] = useState(false);
   const [playingForward, setPlayingForward] = useState(true);
 
   const itemVariants = prefersReducedMotion
@@ -35,101 +46,152 @@ export default function Hero() {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
-    const forward = forwardRef.current;
-    const reverse = reverseRef.current;
-    if (!forward || !reverse) return;
+    const mq = window.matchMedia("(max-width: 639px)");
 
-    function markReady() {
-      setVideoReady(true);
+    function markPlaying() {
+      setMediaPlaying(true);
     }
 
-    function handoffToReverse() {
+    function setupMobile() {
+      const video = mobileVideoRef.current;
+      if (!video) return () => {};
+
+      function onPlaying() {
+        markPlaying();
+      }
+
+      function attemptPlay() {
+        const video = mobileVideoRef.current;
+        if (!video) return;
+        void tryPlayVideo(video).catch(() => {
+          /* Autoplay blocked — poster stays visible */
+        });
+      }
+
+      video.addEventListener("playing", onPlaying);
+      video.addEventListener("canplay", attemptPlay);
+      video.addEventListener("loadeddata", attemptPlay);
+
+      attemptPlay();
+
+      return () => {
+        video.removeEventListener("playing", onPlaying);
+        video.removeEventListener("canplay", attemptPlay);
+        video.removeEventListener("loadeddata", attemptPlay);
+      };
+    }
+
+    function setupDesktop() {
       const forward = forwardRef.current;
       const reverse = reverseRef.current;
-      if (switchingRef.current || !forward || !reverse) return;
-      switchingRef.current = true;
+      if (!forward || !reverse) return () => {};
 
-      setPlayingForward(false);
-      forward.pause();
-      reverse.currentTime = 0;
-      void reverse.play().finally(() => {
-        switchingRef.current = false;
-      });
-    }
+      function handoffToReverse() {
+        const fwd = forwardRef.current;
+        const rev = reverseRef.current;
+        if (switchingRef.current || !fwd || !rev) return;
+        switchingRef.current = true;
 
-    function handoffToForward() {
-      const forward = forwardRef.current;
-      const reverse = reverseRef.current;
-      if (switchingRef.current || !forward || !reverse) return;
-      switchingRef.current = true;
+        setPlayingForward(false);
+        fwd.pause();
+        rev.currentTime = 0;
+        void tryPlayVideo(rev).finally(() => {
+          switchingRef.current = false;
+        });
+      }
 
-      setPlayingForward(true);
-      reverse.pause();
-      forward.currentTime = 0;
-      void forward.play().finally(() => {
-        switchingRef.current = false;
-      });
-    }
+      function handoffToForward() {
+        const fwd = forwardRef.current;
+        const rev = reverseRef.current;
+        if (switchingRef.current || !fwd || !rev) return;
+        switchingRef.current = true;
 
-    function onForwardEnded() {
-      handoffToReverse();
-    }
+        setPlayingForward(true);
+        rev.pause();
+        fwd.currentTime = 0;
+        void tryPlayVideo(fwd).finally(() => {
+          switchingRef.current = false;
+        });
+      }
 
-    function onReverseEnded() {
-      handoffToForward();
-    }
-
-    function onForwardTimeUpdate() {
-      const forward = forwardRef.current;
-      if (!forward) return;
-      const duration = forward.duration;
-      if (!Number.isFinite(duration) || duration <= 0) return;
-      if (forward.currentTime >= duration - 0.05) {
+      function onForwardEnded() {
         handoffToReverse();
       }
-    }
 
-    function onReverseTimeUpdate() {
-      const reverse = reverseRef.current;
-      if (!reverse) return;
-      const duration = reverse.duration;
-      if (!Number.isFinite(duration) || duration <= 0) return;
-      if (reverse.currentTime >= duration - 0.05) {
+      function onReverseEnded() {
         handoffToForward();
       }
+
+      function onForwardTimeUpdate() {
+        const fwd = forwardRef.current;
+        if (!fwd) return;
+        const duration = fwd.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        if (fwd.currentTime >= duration - 0.05) {
+          handoffToReverse();
+        }
+      }
+
+      function onReverseTimeUpdate() {
+        const rev = reverseRef.current;
+        if (!rev) return;
+        const duration = rev.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        if (rev.currentTime >= duration - 0.05) {
+          handoffToForward();
+        }
+      }
+
+      function attemptPlay() {
+        const fwd = forwardRef.current;
+        const rev = reverseRef.current;
+        if (!fwd || !rev) return;
+        switchingRef.current = false;
+        setPlayingForward(true);
+        fwd.currentTime = 0;
+        rev.pause();
+        void tryPlayVideo(fwd).catch(() => {
+          /* Autoplay blocked — poster stays visible */
+        });
+      }
+
+      forward.addEventListener("playing", markPlaying);
+      forward.addEventListener("canplay", attemptPlay);
+      forward.addEventListener("loadeddata", attemptPlay);
+      forward.addEventListener("loadedmetadata", attemptPlay);
+      forward.addEventListener("ended", onForwardEnded);
+      forward.addEventListener("timeupdate", onForwardTimeUpdate);
+      reverse.addEventListener("ended", onReverseEnded);
+      reverse.addEventListener("timeupdate", onReverseTimeUpdate);
+
+      attemptPlay();
+
+      return () => {
+        forward.removeEventListener("playing", markPlaying);
+        forward.removeEventListener("canplay", attemptPlay);
+        forward.removeEventListener("loadeddata", attemptPlay);
+        forward.removeEventListener("loadedmetadata", attemptPlay);
+        forward.removeEventListener("ended", onForwardEnded);
+        forward.removeEventListener("timeupdate", onForwardTimeUpdate);
+        reverse.removeEventListener("ended", onReverseEnded);
+        reverse.removeEventListener("timeupdate", onReverseTimeUpdate);
+      };
     }
 
-    function tryPlay() {
-      const forward = forwardRef.current;
-      const reverse = reverseRef.current;
-      if (!forward || !reverse) return;
-      switchingRef.current = false;
+    let cleanup = mq.matches ? setupMobile() : setupDesktop();
+
+    function onBreakpointChange(event: MediaQueryListEvent) {
+      cleanup();
+      setMediaPlaying(false);
       setPlayingForward(true);
-      forward.currentTime = 0;
-      reverse.pause();
-      void forward.play().catch(() => {
-        /* Autoplay blocked — poster image stays visible underneath */
-      });
+      cleanup = event.matches ? setupMobile() : setupDesktop();
     }
 
-    forward.addEventListener("loadeddata", markReady);
-    forward.addEventListener("canplay", markReady);
-    forward.addEventListener("loadedmetadata", tryPlay);
-    forward.addEventListener("ended", onForwardEnded);
-    forward.addEventListener("timeupdate", onForwardTimeUpdate);
-    reverse.addEventListener("ended", onReverseEnded);
-    reverse.addEventListener("timeupdate", onReverseTimeUpdate);
-
-    tryPlay();
+    mq.addEventListener("change", onBreakpointChange);
 
     return () => {
-      forward.removeEventListener("loadeddata", markReady);
-      forward.removeEventListener("canplay", markReady);
-      forward.removeEventListener("loadedmetadata", tryPlay);
-      forward.removeEventListener("ended", onForwardEnded);
-      forward.removeEventListener("timeupdate", onForwardTimeUpdate);
-      reverse.removeEventListener("ended", onReverseEnded);
-      reverse.removeEventListener("timeupdate", onReverseTimeUpdate);
+      cleanup();
+      mq.removeEventListener("change", onBreakpointChange);
     };
   }, [prefersReducedMotion]);
 
@@ -144,47 +206,59 @@ export default function Hero() {
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[center_35%] sm:object-center"
+        className={`z-0 object-cover object-[center_35%] transition-opacity duration-700 sm:object-center ${
+          mediaPlaying ? "opacity-0" : "opacity-100"
+        }`}
         aria-hidden
       />
 
       {!prefersReducedMotion ? (
         <>
           <video
+            ref={mobileVideoRef}
+            src={HERO_VIDEO_LOOP_SRC}
+            className={`${heroVideoClass} transition-opacity duration-700 sm:hidden ${
+              mediaPlaying ? "opacity-100" : "opacity-0"
+            }`}
+            autoPlay
+            muted
+            playsInline
+            loop
+            preload="auto"
+            aria-hidden
+          />
+          <video
             ref={forwardRef}
-            className={`${heroVideoClass} transition-opacity duration-700 ${
-              videoReady ? "opacity-100" : "opacity-0"
+            src={HERO_VIDEO_SRC}
+            className={`${heroVideoClass} hidden transition-opacity duration-700 sm:block ${
+              mediaPlaying ? "opacity-100" : "opacity-0"
             } ${playingForward ? "z-[1]" : "z-0"}`}
+            autoPlay
             muted
             playsInline
             preload="auto"
-            poster={HERO_POSTER_SRC}
             aria-hidden
-          >
-            <source src={HERO_VIDEO_SRC} type="video/mp4" />
-          </video>
+          />
           <video
             ref={reverseRef}
-            className={`${heroVideoClass} transition-opacity duration-700 ${
-              videoReady ? "opacity-100" : "opacity-0"
+            src={HERO_VIDEO_REVERSE_SRC}
+            className={`${heroVideoClass} hidden transition-opacity duration-700 sm:block ${
+              mediaPlaying ? "opacity-100" : "opacity-0"
             } ${playingForward ? "z-0" : "z-[1]"}`}
             muted
             playsInline
             preload="auto"
-            poster={HERO_POSTER_SRC}
             aria-hidden
-          >
-            <source src={HERO_VIDEO_REVERSE_SRC} type="video/mp4" />
-          </video>
+          />
         </>
       ) : null}
 
       <div
-        className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-brand-darkGreen/60 via-brand-darkGreen/20 to-brand-darkGreen/5 sm:block"
+        className="pointer-events-none absolute inset-0 z-[2] hidden bg-gradient-to-t from-brand-darkGreen/60 via-brand-darkGreen/20 to-brand-darkGreen/5 sm:block"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent sm:hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-black/35 to-transparent sm:hidden"
         aria-hidden
       />
 

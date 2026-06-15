@@ -51,4 +51,7 @@ export const HERO_VIDEO_SRC = "/hero-video.mp4";
 /** Reversed hero clip — plays after forward ends for seamless pan back */
 export const HERO_VIDEO_REVERSE_SRC = "/hero-video-reverse.mp4";
 
+/** Looped hero clip — single-file playback on mobile for reliable autoplay */
+export const HERO_VIDEO_LOOP_SRC = "/hero-video-loop.mp4";
+
 export const NTR_LVR_URL = "https://ntrlvr.com";
