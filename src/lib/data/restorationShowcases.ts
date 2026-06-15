@@ -30,9 +30,9 @@ export const restorationShowcaseCategories: RestorationShowcaseCategory[] = [
         beforeSrc: "/restoration/edible-garden-before.jpg",
         afterSrc: "/restoration/edible-garden-after.jpg",
         beforeAlt:
-          "Unused sandy side yard beside a Florida home before edible garden installation",
+          "Unused sandy side yard beside a Florida home with open concrete patio before edible garden installation",
         afterAlt:
-          "Same side yard with cedar raised beds, vegetables, herbs, and trellised crops ready to harvest",
+          "Same side yard with raised beds in the soil area only, concrete patio left clear for outdoor living",
         beforeLabel: "Before · Unused",
         afterLabel: "After · Growing",
         initialPosition: 44,
@@ -60,9 +60,9 @@ export const restorationShowcaseCategories: RestorationShowcaseCategory[] = [
         beforeSrc: "/restoration/food-forest-before.jpg",
         afterSrc: "/restoration/food-forest-after.jpg",
         beforeAlt:
-          "Florida backyard with patchy lawn and no productive plantings before food forest installation",
+          "Sunny Florida backyard with patchy lawn and clear sliding door access before food forest installation",
         afterAlt:
-          "Same backyard with a layered food forest of fruit trees, edible shrubs, and mulch paths",
+          "Same backyard transformed into a dense layered food forest with citrus, mango, banana, and papaya while keeping the entry clear",
         beforeLabel: "Before · Lawn",
         afterLabel: "After · Harvest",
         initialPosition: 40,
