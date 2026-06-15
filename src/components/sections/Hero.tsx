@@ -198,7 +198,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-[100dvh] min-h-screen items-end overflow-hidden bg-brand-darkGreen sm:items-center"
+      className="relative flex min-h-[100dvh] min-h-screen w-full max-w-full items-end overflow-hidden bg-brand-darkGreen sm:items-center"
     >
       <Image
         src={HERO_POSTER_SRC}
@@ -258,6 +258,10 @@ export default function Hero() {
         aria-hidden
       />
       <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[min(58%,22rem)] bg-gradient-to-t from-black/70 from-0% via-black/40 via-45% to-transparent to-100% sm:hidden"
+        aria-hidden
+      />
+      <div
         className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-black/35 to-transparent sm:hidden"
         aria-hidden
       />
@@ -270,10 +274,6 @@ export default function Hero() {
       >
         <div className="relative max-w-xl sm:max-w-none">
           <div className="relative">
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 bottom-[calc(-1*max(1.75rem,env(safe-area-inset-bottom,0px)))] -z-10 bg-gradient-to-b from-transparent via-black/30 to-black/65 sm:hidden"
-              aria-hidden
-            />
             <motion.div variants={itemVariants}>
               <h1 className="text-shadow-hero font-display text-[1.625rem] font-bold leading-[1.08] tracking-tight text-white sm:max-w-4xl sm:text-4xl sm:leading-[1.1] md:text-7xl">
                 <span className="block sm:inline">EVERGREEN</span>{" "}
