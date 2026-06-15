@@ -19,6 +19,7 @@ const links = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [overHero, setOverHero] = useState(true);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -32,9 +33,26 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    const hero = document.getElementById("home");
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setOverHero(entry.isIntersecting);
+      },
+      { threshold: 0.15, rootMargin: "-1px 0px 0px 0px" },
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+
   function closeMobile() {
     setMobileOpen(false);
   }
+
+  const lightHeader = overHero && !mobileOpen;
 
   const mobileMenu =
     mobileOpen && mounted ? (
@@ -42,7 +60,7 @@ export default function Navbar() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-brand-sand/90 px-6 backdrop-blur-md lg:hidden"
+        className="fixed inset-0 z-[9998] flex flex-col bg-brand-cream/95 px-6 backdrop-blur-xl lg:hidden"
         style={{
           paddingTop: "max(4.5rem, env(safe-area-inset-top, 0px))",
           paddingBottom: "env(safe-area-inset-bottom, 0px)",
@@ -51,12 +69,12 @@ export default function Navbar() {
         aria-modal="true"
         aria-label="Mobile navigation"
       >
-        <nav className="flex max-h-[min(70vh,32rem)] flex-col items-center gap-6 overflow-y-auto py-6">
+        <nav className="flex flex-1 flex-col items-start justify-center gap-1 overflow-y-auto py-6">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="flex min-h-[48px] items-center text-2xl font-semibold text-brand-darkGreen"
+              className="flex min-h-[52px] w-full items-center font-display text-2xl text-brand-darkGreen transition-colors hover:text-brand-midGreen"
               onClick={closeMobile}
             >
               {link.label}
@@ -65,9 +83,9 @@ export default function Navbar() {
           <Link
             href="#request-quote"
             onClick={closeMobile}
-            className="rounded-full bg-brand-darkGreen px-8 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#2E7D32]"
+            className="mt-6 inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand-darkGreen px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2E7D32]"
           >
-            Request a Quote ▶
+            Request a Quote
           </Link>
         </nav>
       </motion.div>
@@ -77,49 +95,67 @@ export default function Navbar() {
     <>
       {mounted && mobileOpen ? createPortal(mobileMenu, document.body) : null}
 
-      <motion.header
-        className="fixed inset-x-0 top-0 z-[9999] border-b border-brand-darkGreen/10 bg-brand-sand/90 shadow-sm backdrop-blur-md sm:bg-brand-sand/75"
-        initial={false}
+      <header
+        className={`fixed inset-x-0 top-0 z-[9999] transition-[background-color,box-shadow,border-color] duration-300 ease-out ${
+          lightHeader
+            ? "border-b border-white/0 bg-transparent"
+            : "border-b border-black/[0.06] bg-brand-cream/80 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-brand-cream/65"
+        }`}
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="container relative z-50 flex h-14 items-center justify-between gap-2 sm:h-16">
+        <div
+          className={`container flex items-center justify-between gap-3 transition-[height] duration-300 ${
+            lightHeader ? "h-[3.75rem] sm:h-20" : "h-14 sm:h-16"
+          }`}
+        >
           <Link
             href="#home"
-            className="relative h-10 min-w-0 flex-1 max-w-[calc(100%-2.75rem)] shrink-0 sm:h-12 sm:w-[26rem] sm:max-w-none sm:flex-none lg:w-[32rem] xl:w-[36rem]"
+            className="relative h-9 w-[11.5rem] shrink-0 sm:h-11 sm:w-[14rem]"
             onClick={closeMobile}
           >
             <Image
               src="/logo2.png"
               alt="Evergreen Solutions FL logo"
               fill
-              sizes="(max-width: 640px) 240px, (max-width: 1024px) 32rem, 40rem"
-              className="object-contain object-left"
+              sizes="(max-width: 640px) 184px, 224px"
+              className={`object-contain object-left transition-[filter,opacity] duration-300 ${
+                lightHeader ? "brightness-0 invert" : ""
+              }`}
               priority
             />
           </Link>
 
-          <nav className="hidden shrink-0 flex-nowrap items-center gap-4 lg:flex xl:gap-5">
+          <nav className="hidden items-center gap-1 lg:flex xl:gap-2">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="whitespace-nowrap text-sm font-medium text-brand-darkGreen transition-colors duration-200 hover:text-brand-midGreen"
+                className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200 xl:px-4 ${
+                  lightHeader
+                    ? "text-white/90 hover:bg-white/10 hover:text-white"
+                    : "text-brand-darkGreen hover:bg-brand-darkGreen/5 hover:text-brand-midGreen"
+                }`}
               >
                 {link.label}
               </Link>
             ))}
             <Button
               href="#request-quote"
-              variant="primary"
-              className="shrink-0 whitespace-nowrap !px-5 !py-2 text-xs sm:text-sm"
+              variant={lightHeader ? "outline-white" : "primary"}
+              className="ml-2 shrink-0 whitespace-nowrap !px-5 !py-2 text-xs sm:text-sm"
             >
-              Request a Quote ▶
+              Request a Quote
             </Button>
           </nav>
 
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="relative z-50 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md p-1.5 text-brand-darkGreen ring-brand-darkGreen/20 hover:bg-brand-darkGreen/5 focus-visible:outline-none focus-visible:ring-2 lg:hidden"
+            className={`relative z-50 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full p-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 lg:hidden ${
+              lightHeader
+                ? "text-white hover:bg-white/10 focus-visible:ring-white/40"
+                : "text-brand-darkGreen hover:bg-brand-darkGreen/5 focus-visible:ring-brand-darkGreen/30"
+            }`}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
@@ -130,7 +166,7 @@ export default function Navbar() {
             )}
           </button>
         </div>
-      </motion.header>
+      </header>
     </>
   );
 }

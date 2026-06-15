@@ -96,7 +96,7 @@ export default function Hero() {
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-black/35 to-transparent sm:hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-32 bg-gradient-to-b from-black/50 via-black/15 to-transparent sm:h-36"
         aria-hidden
       />
 
