@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import Button from "@/components/ui/Button";
-import { PHOTO_URLS } from "@/lib/constants";
+import { HERO_VIDEO_SRC, PHOTO_URLS } from "@/lib/constants";
 
 const heroVariants = {
   hidden: {},
@@ -15,17 +16,54 @@ const itemVariants = {
 };
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function syncPlayback() {
+      if (!video) return;
+      if (mediaQuery.matches) {
+        video.pause();
+        return;
+      }
+      void video.play().catch(() => {
+        /* Autoplay may be blocked; poster remains visible */
+      });
+    }
+
+    syncPlayback();
+    mediaQuery.addEventListener("change", syncPlayback);
+    return () => mediaQuery.removeEventListener("change", syncPlayback);
+  }, []);
+
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center"
-      style={{
-        backgroundImage: `linear-gradient(rgba(38, 34, 22, 0.62), rgba(28, 36, 24, 0.45)), url(${PHOTO_URLS.hero})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="relative flex min-h-screen items-center overflow-hidden bg-brand-cream"
     >
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={PHOTO_URLS.hero}
+        aria-hidden
+      >
+        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+      </video>
+
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-brand-darkGreen/50 via-brand-darkGreen/10 to-transparent"
+        aria-hidden
+      />
+
       <motion.div
         variants={heroVariants}
         initial="hidden"

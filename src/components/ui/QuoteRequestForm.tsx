@@ -147,7 +147,10 @@ export default function QuoteRequestForm() {
           <p className="font-semibold">Thanks, your request was sent.</p>
           <p className="mt-2 text-brand-muted">
             We&apos;ll follow up soon. If needed, email{" "}
-            <a href={`mailto:${RECIPIENT}`} className="font-semibold underline underline-offset-2">
+            <a
+              href={`mailto:${RECIPIENT}`}
+              className="font-semibold underline underline-offset-2"
+            >
               {RECIPIENT}
             </a>
             .
@@ -155,7 +158,7 @@ export default function QuoteRequestForm() {
           <button
             type="button"
             onClick={() => setStatus("idle")}
-            className="mt-3 text-sm font-semibold text-brand-darkGreen underline underline-offset-4"
+            className="mt-3 text-sm font-semibold text-brand-darkGreen underline underline-offset-4 hover:text-brand-midGreen"
           >
             Send another request
           </button>
@@ -171,7 +174,7 @@ export default function QuoteRequestForm() {
             </div>
           ) : null}
 
-          <label className="text-sm font-medium text-brand-darkGreen">
+          <label className="text-sm font-medium text-brand-darkGreenGreen">
             Florida county
             <select
               required

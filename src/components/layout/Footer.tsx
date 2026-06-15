@@ -50,11 +50,11 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-brand-darkGreen">Our Scope</h3>
             <ul className="mt-4 space-y-2 text-sm text-brand-muted">
+              <li>Edible Gardens & Food Forests</li>
               <li>Native Restoration</li>
-              <li>Land Management</li>
-              <li>Habitat Consulting</li>
+              <li>Commercial Restoration</li>
+              <li>Invasive Species Clearing</li>
               <li>Case Studies</li>
-              <li>Species Assessment</li>
             </ul>
           </div>
 

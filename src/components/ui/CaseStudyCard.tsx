@@ -6,7 +6,6 @@ export type CaseStudyCardProps = {
   excerpt: string;
   image: string;
   alt: string;
-  /** UF/IFAS or other source article (opens in a new tab). */
   href?: string;
 };
 
@@ -49,5 +48,9 @@ export default function CaseStudyCard({
     );
   }
 
-  return <article className="overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-xl">{body}</article>;
+  return (
+    <article className="overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-xl">
+      {body}
+    </article>
+  );
 }

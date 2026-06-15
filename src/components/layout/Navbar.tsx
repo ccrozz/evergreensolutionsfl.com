@@ -12,6 +12,7 @@ const links = [
   { href: "#home", label: "Home" },
   { href: "#about-us", label: "About Us" },
   { href: "#services", label: "Services" },
+  { href: "#ntr-lvr", label: "NTR LVR" },
   { href: "#case-studies", label: "Case Studies" },
 ];
 
@@ -29,15 +30,15 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  function closeMobile() {
+    setMobileOpen(false);
+  }
 
   const mobileMenu =
     mobileOpen && mounted ? (
@@ -55,25 +56,19 @@ export default function Navbar() {
         aria-label="Mobile navigation"
       >
         <nav className="flex max-h-[min(70vh,32rem)] flex-col items-center gap-6 overflow-y-auto py-6">
-          {links.map((link, index) => (
-            <motion.div
+          {links.map((link) => (
+            <Link
               key={link.href}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.06 }}
+              href={link.href}
+              className="text-2xl font-semibold text-brand-darkGreen"
+              onClick={closeMobile}
             >
-              <Link
-                href={link.href}
-                className="text-2xl font-semibold text-brand-darkGreen"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            </motion.div>
+              {link.label}
+            </Link>
           ))}
           <Link
             href="#request-quote"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobile}
             className="rounded-full bg-brand-darkGreen px-8 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#2E7D32]"
           >
             Request a Quote ▶
@@ -84,9 +79,8 @@ export default function Navbar() {
 
   return (
     <>
-      {mounted && mobileOpen
-        ? createPortal(mobileMenu, document.body)
-        : null}
+      {mounted && mobileOpen ? createPortal(mobileMenu, document.body) : null}
+
       <motion.header
         className={`fixed inset-x-0 top-0 z-[9999] transition-all duration-300 ${
           scrolled
@@ -95,52 +89,52 @@ export default function Navbar() {
         }`}
         initial={false}
       >
-      <div className="container relative z-50 flex min-h-[4.5rem] items-center justify-between gap-3 py-2 sm:h-24 sm:py-0">
-        <Link
-          href="#home"
-          className="relative h-12 min-w-0 flex-1 max-w-[calc(100%-3.25rem)] sm:h-20 sm:w-[32rem] sm:max-w-none sm:flex-none lg:w-[40rem]"
-          onClick={() => setMobileOpen(false)}
-        >
-          <Image
-            src="/logo2.png"
-            alt="Evergreen Solutions FL logo"
-            fill
-            sizes="(max-width: 640px) 240px, (max-width: 1024px) 32rem, 40rem"
-            className="object-contain object-left"
-            priority
-          />
-        </Link>
+        <div className="container relative z-50 flex min-h-[4.5rem] items-center justify-between gap-3 py-2 sm:h-24 sm:py-0">
+          <Link
+            href="#home"
+            className="relative h-12 min-w-0 flex-1 max-w-[calc(100%-3.25rem)] shrink-0 sm:h-20 sm:w-[32rem] sm:max-w-none sm:flex-none lg:w-[40rem]"
+            onClick={closeMobile}
+          >
+            <Image
+              src="/logo2.png"
+              alt="Evergreen Solutions FL logo"
+              fill
+              sizes="(max-width: 640px) 240px, (max-width: 1024px) 32rem, 40rem"
+              className="object-contain object-left"
+              priority
+            />
+          </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-brand-darkGreen transition-colors duration-200 hover:text-brand-midGreen"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Button href="#request-quote" variant="primary">
-            Request a Quote ▶
-          </Button>
-        </nav>
+          <nav className="hidden shrink-0 flex-nowrap items-center gap-5 lg:flex xl:gap-6">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="whitespace-nowrap text-sm font-medium text-brand-darkGreen transition-colors duration-200 hover:text-brand-midGreen"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Button href="#request-quote" variant="primary" className="shrink-0 whitespace-nowrap">
+              Request a Quote ▶
+            </Button>
+          </nav>
 
-        <button
-          type="button"
-          onClick={() => setMobileOpen((prev) => !prev)}
-          className="relative z-50 shrink-0 rounded-md p-2 text-brand-darkGreen ring-brand-darkGreen/20 hover:bg-brand-darkGreen/5 focus-visible:outline-none focus-visible:ring-2 lg:hidden"
-          aria-expanded={mobileOpen}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileOpen ? (
-            <X className="h-6 w-6" weight="bold" aria-hidden />
-          ) : (
-            <List className="h-6 w-6" weight="bold" aria-hidden />
-          )}
-        </button>
-      </div>
-    </motion.header>
+          <button
+            type="button"
+            onClick={() => setMobileOpen((open) => !open)}
+            className="relative z-50 shrink-0 rounded-md p-2 text-brand-darkGreen ring-brand-darkGreen/20 hover:bg-brand-darkGreen/5 focus-visible:outline-none focus-visible:ring-2 lg:hidden"
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileOpen ? (
+              <X className="h-6 w-6" weight="bold" aria-hidden />
+            ) : (
+              <List className="h-6 w-6" weight="bold" aria-hidden />
+            )}
+          </button>
+        </div>
+      </motion.header>
     </>
   );
 }

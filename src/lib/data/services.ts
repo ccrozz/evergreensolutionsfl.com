@@ -1,7 +1,6 @@
 import type { IconProps } from "@phosphor-icons/react";
-import { Flask, House, Leaf, Tree } from "@phosphor-icons/react";
+import { Barn, Broom, Carrot, Leaf } from "@phosphor-icons/react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
-import { PHOTO_URLS } from "@/lib/constants";
 
 export type Service = {
   icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
@@ -13,31 +12,31 @@ export type Service = {
 
 export const services: Service[] = [
   {
+    icon: Carrot,
+    title: "Edible Gardens & Food Forests",
+    body: "Raised beds, perennial fruit layers, and Florida-season crops—so clients grow food steps from the kitchen, not just curb appeal.",
+    image: "/restoration/edible-garden-after.jpg",
+    alt: "Productive raised-bed edible garden beside a Florida home",
+  },
+  {
     icon: Leaf,
     title: "Native Restoration",
-    body: "Providing leading ecological restoration services, sustainable land practices, and invasive species management.",
-    image: PHOTO_URLS.services.native,
-    alt: "Cypress trees and knees in a Florida blackwater wetland restoration setting",
+    body: "Invasive species cleared and replaced with layered native plantings that support pollinators, hold soil, and cut long-term maintenance.",
+    image: "/restoration/residential-after.jpg",
+    alt: "Florida home front yard restored with native grasses and pollinator plantings",
   },
   {
-    icon: Tree,
-    title: "Land Management",
-    body: "Providing ecological restoration services, sustainable and diverse practices, and comprehensive land management.",
-    image: PHOTO_URLS.services.land,
-    alt: "Organized agricultural field rows representing practical Florida land management",
+    icon: Barn,
+    title: "Commercial Restoration",
+    body: "Farmland, wetland buffers, grazing pasture, and BMP work at scale—restoring degraded acreage for compliance, productivity, and land value.",
+    image: "/restoration/wetland-buffer-after.jpg",
+    alt: "Commercial farm edge with vegetated wetland buffer and BMP swale",
   },
   {
-    icon: Flask,
-    title: "Species Assessment",
-    body: "Bioavailability and best-species management areas to preserve Florida's diverse and unique ecosystems.",
-    image: PHOTO_URLS.services.species,
-    alt: "Native wildflowers in a Florida meadow for species identification and assessment",
-  },
-  {
-    icon: House,
-    title: "Habitat Consulting",
-    body: "Habitat consulting, habitat analysis, and ecosystem maximization for Florida's coastal and inland environments.",
-    image: PHOTO_URLS.services.habitat,
-    alt: "Florida wetland with native vegetation used for habitat planning and consulting",
+    icon: Broom,
+    title: "Invasive Species Clearing",
+    body: "Brazilian pepper, cogongrass, and other invasives removed at scale—then replanted with natives so land is usable and compliant again.",
+    image: "/restoration/invasive-clearing-after.jpg",
+    alt: "Cleared commercial fence line after invasive species removal and native replanting",
   },
 ];

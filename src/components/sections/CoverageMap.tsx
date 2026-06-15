@@ -7,11 +7,11 @@ import FloridaMap from "@/components/ui/FloridaMap";
 import { PHOTO_URLS } from "@/lib/constants";
 
 const benefits = [
+  "Edible Gardens & Food Forests",
   "Native Restoration",
-  "Land Management",
-  "Habitat Consulting",
+  "Commercial Restoration",
   "Invasive Species Removal",
-  "Sustainable Ecosystem Practices",
+  "BMP & Wetland Buffers",
 ];
 
 export default function CoverageMap() {
@@ -25,10 +25,13 @@ export default function CoverageMap() {
           transition={{ duration: 0.55 }}
           className="rounded-2xl bg-white p-7 shadow-soft"
         >
-          <SectionHeading eyebrow="Key Florida Coverage Areas" title="Key Florida Coverage Areas" />
+          <SectionHeading
+            eyebrow="Key Florida Coverage Areas"
+            title="Key Florida Coverage Areas"
+          />
           <p className="mt-5 max-w-xl text-brand-muted">
-            Florida Coverage on ecological restoration services, sustainable land
-            management, diverse and unique solutions.
+            Florida Coverage on ecological restoration services, sustainable land management,
+            diverse and unique solutions.
           </p>
           <p className="mt-5 font-semibold text-brand-darkGreen">Benefits and Results:</p>
           <ul className="mt-3 space-y-2 text-brand-muted">

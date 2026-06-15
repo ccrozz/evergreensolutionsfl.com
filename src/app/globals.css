@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --green-dark: #1B5E20;
-  --green-mid: #00838F;
-  --green-leaf: #4CAF50;
-  --cream: #FFF8E1;
-  --sand: #F5F0E8;
+  --green-dark: #1b5e20;
+  --green-mid: #00838f;
+  --green-leaf: #4caf50;
+  --cream: #fff8e1;
+  --sand: #f5f0e8;
 }
 
 html {

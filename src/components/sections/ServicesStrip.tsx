@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -23,8 +23,8 @@ export default function ServicesStrip() {
       <div className="container">
         <SectionHeading
           eyebrow="Services"
-          title="Native Solutions for Florida Landscapes"
-          description="Field-first ecological restoration, practical land management, and measurable habitat outcomes."
+          title="Land that feeds families and restores Florida"
+          description="Edible gardens, native habitat, commercial-acreage restoration, and invasive clearing—field-first work with measurable outcomes."
           centered
         />
         <motion.div

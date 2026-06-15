@@ -1,5 +1,5 @@
 export const PHOTO_URLS = {
-  /** Hero: native Florida wetland — pond, ferns, swamp forest (Everglades feel), slightly desaturated */
+  /** Hero fallback poster while video loads */
   hero:
     "https://images.unsplash.com/photo-1651283610197-c1d0c9c39bca?auto=format&fit=crop&w=1920&q=85&sat=-8",
   services: {
@@ -31,4 +31,18 @@ export const PHOTO_URLS = {
   teamHeadshot: "/coleman-headshot.png",
   /** Local headshot (`public/grayheadshot.png`) */
   teamGraysonAvatar: "/grayheadshot.png",
+  /**
+   * @deprecated Use `restorationShowcases` in `src/lib/data/restorationShowcases.ts`
+   */
+  restoration: {
+    after:
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=85",
+    before:
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=85",
+  },
 };
+
+/** Hero background clip (trimmed from site screen recording, 4s–15s) */
+export const HERO_VIDEO_SRC = "/hero-video.mp4";
+
+export const NTR_LVR_URL = "https://ntrlvr.com";
