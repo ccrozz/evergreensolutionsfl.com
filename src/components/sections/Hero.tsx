@@ -44,7 +44,9 @@ export default function Hero() {
     }
 
     function handoffToReverse() {
-      if (switchingRef.current) return;
+      const forward = forwardRef.current;
+      const reverse = reverseRef.current;
+      if (switchingRef.current || !forward || !reverse) return;
       switchingRef.current = true;
 
       setPlayingForward(false);
@@ -56,7 +58,9 @@ export default function Hero() {
     }
 
     function handoffToForward() {
-      if (switchingRef.current) return;
+      const forward = forwardRef.current;
+      const reverse = reverseRef.current;
+      if (switchingRef.current || !forward || !reverse) return;
       switchingRef.current = true;
 
       setPlayingForward(true);
@@ -76,6 +80,8 @@ export default function Hero() {
     }
 
     function onForwardTimeUpdate() {
+      const forward = forwardRef.current;
+      if (!forward) return;
       const duration = forward.duration;
       if (!Number.isFinite(duration) || duration <= 0) return;
       if (forward.currentTime >= duration - 0.05) {
@@ -84,6 +90,8 @@ export default function Hero() {
     }
 
     function onReverseTimeUpdate() {
+      const reverse = reverseRef.current;
+      if (!reverse) return;
       const duration = reverse.duration;
       if (!Number.isFinite(duration) || duration <= 0) return;
       if (reverse.currentTime >= duration - 0.05) {
@@ -92,6 +100,9 @@ export default function Hero() {
     }
 
     function tryPlay() {
+      const forward = forwardRef.current;
+      const reverse = reverseRef.current;
+      if (!forward || !reverse) return;
       switchingRef.current = false;
       setPlayingForward(true);
       forward.currentTime = 0;
