@@ -132,9 +132,9 @@ export default function QuoteRequestForm() {
   }
 
   return (
-    <div id="quote-form" className="mb-10 rounded-2xl border border-brand-darkGreen/15 bg-white/80 p-6 shadow-soft">
-      <h3 className="font-display text-3xl text-brand-darkGreen">Request a Free Quote</h3>
-      <p className="mt-2 text-sm text-brand-muted">
+    <div id="quote-form" className="mb-8 rounded-2xl border border-brand-darkGreen/15 bg-white/80 p-4 shadow-soft sm:mb-10 sm:p-6">
+      <h3 className="font-display text-2xl text-brand-darkGreen sm:text-3xl">Request a Free Quote</h3>
+      <p className="mt-2 text-sm leading-relaxed text-brand-muted">
         Submit here and we&apos;ll email your request to {RECIPIENT}. You can attach photos,
         maps, or documents (up to {MAX_FILES} files, 10 MB each).
       </p>
@@ -274,7 +274,7 @@ export default function QuoteRequestForm() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="inline-flex items-center justify-center rounded-full bg-brand-darkGreen px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2E7D32] disabled:cursor-not-allowed disabled:opacity-70 sm:col-span-2 sm:w-fit"
+            className="inline-flex w-full items-center justify-center rounded-full bg-brand-darkGreen px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2E7D32] disabled:cursor-not-allowed disabled:opacity-70 sm:col-span-2 sm:w-fit"
           >
             {status === "sending" ? "Sending..." : "Send Request"}
           </button>

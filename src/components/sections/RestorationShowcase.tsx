@@ -20,65 +20,35 @@ export default function RestorationShowcase() {
 
   return (
     <section id="restoration" className="section-padding overflow-x-clip bg-brand-sand">
-      <div className="container">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="order-2 lg:order-1"
-          >
+      <div className="container section-stack">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-brand-midGreen sm:mb-3 sm:text-xs sm:tracking-[0.22em]">
+            See the difference
+          </p>
+          <h2 className="text-balance font-display text-[1.625rem] leading-tight text-brand-darkGreen sm:text-3xl lg:text-4xl">
+            Restoration that{" "}
+            <em className="italic text-brand-midGreen">feeds families</em>, not just the lawn.
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-brand-muted sm:mt-3 sm:text-base">
+            <span className="sm:hidden">Swipe the slider to compare. Tap tabs to explore projects.</span>
+            <span className="hidden sm:inline">
+              Drag the line to compare. Under Residential, explore edible gardens, food forests,
+              and native plantings. Under Commercial, see wetland buffers, invasive clearing,
+              grazing pasture, and full-acreage restoration.
+            </span>
+          </p>
+
+          <div className="mobile-tab-bleed mt-4 sm:mt-6">
             <div
-              role="tabpanel"
-              id="restoration-slider-panel"
-              aria-labelledby={`restoration-item-tab-${active.id}`}
+              role="tablist"
+              aria-label="Project scale"
+              className="mobile-tab-scroll"
             >
-              <BeforeAfterSlider
-                key={active.id}
-                afterSrc={active.afterSrc}
-                afterAlt={active.afterAlt}
-                beforeSrc={active.beforeSrc}
-                beforeAlt={active.beforeAlt}
-                beforeLabel={active.beforeLabel ?? "Before"}
-                afterLabel={active.afterLabel ?? "After"}
-                initialPosition={active.initialPosition ?? 42}
-                priority={
-                  categoryIndex === 0 && itemIndex === 0
-                }
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="order-1 lg:order-2"
-          >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-midGreen">
-              See the difference
-            </p>
-            <h2 className="font-display text-2xl leading-tight text-brand-darkGreen sm:text-3xl lg:text-4xl">
-              Restoration that{" "}
-              <em className="italic text-brand-midGreen">feeds families</em>, not just the lawn.
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-brand-muted sm:mt-4 sm:text-base">
-              <span className="sm:hidden">Drag to compare before and after. Tap Residential or Commercial to explore.</span>
-              <span className="hidden sm:inline">
-                Drag the line to compare. Under Residential, explore edible gardens, food forests,
-                and native plantings. Under Commercial, see wetland buffers, invasive clearing,
-                grazing pasture, and full-acreage restoration.
-              </span>
-            </p>
-
-            <div className="mobile-tab-bleed mt-6 sm:mt-8">
-              <div
-                role="tablist"
-                aria-label="Project scale"
-                className="mobile-tab-scroll"
-              >
               {restorationShowcaseCategories.map((entry, index) => {
                 const isActive = categoryIndex === index;
                 return (
@@ -91,7 +61,7 @@ export default function RestorationShowcase() {
                     aria-controls="restoration-slider-panel"
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => selectCategory(index)}
-                    className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-5 ${
+                    className={`shrink-0 snap-start rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-5 sm:py-2.5 ${
                       isActive
                         ? "bg-brand-darkGreen text-white shadow-soft"
                         : "bg-white text-brand-darkGreen ring-1 ring-brand-darkGreen/15 hover:bg-brand-cream"
@@ -101,16 +71,16 @@ export default function RestorationShowcase() {
                   </button>
                 );
               })}
-              </div>
             </div>
+          </div>
 
-            {showItemTabs ? (
-              <div className="mobile-tab-bleed mt-3">
-                <div
-                  role="tablist"
-                  aria-label={`${category.label} project type`}
-                  className="mobile-tab-scroll"
-                >
+          {showItemTabs ? (
+            <div className="mobile-tab-bleed mt-2 sm:mt-3">
+              <div
+                role="tablist"
+                aria-label={`${category.label} project type`}
+                className="mobile-tab-scroll"
+              >
                 {category.items.map((item, index) => {
                   const isActive = itemIndex === index;
                   return (
@@ -123,7 +93,7 @@ export default function RestorationShowcase() {
                       aria-controls="restoration-slider-panel"
                       tabIndex={isActive ? 0 : -1}
                       onClick={() => setItemIndex(index)}
-                      className={`shrink-0 rounded-full px-3.5 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-4 ${
+                      className={`shrink-0 snap-start rounded-full px-3.5 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-darkGreen focus-visible:ring-offset-2 sm:px-4 sm:py-2.5 ${
                         isActive
                           ? "bg-brand-midGreen/15 text-brand-darkGreen ring-1 ring-brand-midGreen/30"
                           : "bg-white/70 text-brand-muted ring-1 ring-brand-darkGreen/10 hover:bg-white hover:text-brand-darkGreen"
@@ -133,15 +103,38 @@ export default function RestorationShowcase() {
                     </button>
                   );
                 })}
-                </div>
               </div>
-            ) : null}
+            </div>
+          ) : null}
+        </motion.div>
 
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-brand-darkGreen/80">
-              {active.description}
-            </p>
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+        >
+          <div
+            role="tabpanel"
+            id="restoration-slider-panel"
+            aria-labelledby={`restoration-item-tab-${active.id}`}
+          >
+            <BeforeAfterSlider
+              key={active.id}
+              afterSrc={active.afterSrc}
+              afterAlt={active.afterAlt}
+              beforeSrc={active.beforeSrc}
+              beforeAlt={active.beforeAlt}
+              beforeLabel={active.beforeLabel ?? "Before"}
+              afterLabel={active.afterLabel ?? "After"}
+              initialPosition={active.initialPosition ?? 42}
+              priority={categoryIndex === 0 && itemIndex === 0}
+            />
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-brand-darkGreen/80 sm:mt-5">
+            {active.description}
+          </p>
+        </motion.div>
       </div>
     </section>
   );

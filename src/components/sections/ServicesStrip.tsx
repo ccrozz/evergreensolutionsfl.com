@@ -8,13 +8,13 @@ import { services } from "@/lib/data/services";
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
   },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
 };
 
 export default function ServicesStrip() {
@@ -24,6 +24,7 @@ export default function ServicesStrip() {
         <SectionHeading
           eyebrow="Services"
           title="Land that feeds families and restores Florida"
+          mobileDescription="Edible gardens, native habitat, commercial restoration, and invasive clearing."
           description="Edible gardens, native habitat, commercial-acreage restoration, and invasive clearing—field-first work with measurable outcomes."
           centered
         />
@@ -32,11 +33,11 @@ export default function ServicesStrip() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+          className="mobile-carousel mt-6 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
         >
           {services.map((service) => (
-            <motion.div key={service.title} variants={item}>
-              <ServiceCard {...service} />
+            <motion.div key={service.title} variants={item} className="mobile-carousel-item">
+              <ServiceCard {...service} compact />
             </motion.div>
           ))}
         </motion.div>

@@ -42,19 +42,19 @@ export const PHOTO_URLS = {
   },
 };
 
-/** Local hero poster — always shown instantly; video layers on top when ready */
-export const HERO_POSTER_SRC = "/hero-poster.jpg";
+/** Rotating hero backgrounds — 1920×1280 stills in `public/heroes/` */
+export const HERO_BACKGROUNDS = [
+  "/heroes/hero-meadow.jpg",
+  "/heroes/hero-food-forest.jpg",
+  "/heroes/hero-wetland.jpg",
+  "/heroes/hero-pasture.jpg",
+  "/heroes/hero-hammock.jpg",
+] as const;
 
-/** Hero background — forward clip; pairs with reverse for ping-pong playback */
-export const HERO_VIDEO_SRC = "/hero-video.mp4";
-
-/** Reversed hero clip — plays after forward ends for seamless pan back */
-export const HERO_VIDEO_REVERSE_SRC = "/hero-video-reverse.mp4";
-
-/** Seamless forward + reverse loop for desktop hero background (~4 MB) */
-export const HERO_VIDEO_LOOP_SRC = "/hero-video-loop.mp4";
+/** First hero frame — used as initial poster / OG fallback */
+export const HERO_POSTER_SRC = HERO_BACKGROUNDS[0];
 
 export const NTR_LVR_URL = "https://ntrlvr.com";
 
-/** NTR LVR app screenshot for the phone mockup on the marketing site */
-export const NTR_LVR_SCREENSHOT_SRC = "/ntrlvr-screenshot.png";
+/** Live designer embedded in the NTR LVR phone mockup (Florida pre-selected) */
+export const NTR_LVR_DESIGNER_URL = "https://www.ntrlvr.com/designer?state=FL";

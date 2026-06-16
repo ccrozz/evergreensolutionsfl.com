@@ -32,7 +32,11 @@ body {
 }
 
 .section-padding {
-  @apply py-12 sm:py-16 md:py-24;
+  @apply py-10 sm:py-16 md:py-24;
+}
+
+.section-stack {
+  @apply flex flex-col gap-8 sm:gap-10;
 }
 
 @layer utilities {
@@ -50,24 +54,89 @@ body {
   }
 
   .mobile-tab-scroll {
-    @apply flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none sm:flex-wrap sm:overflow-visible sm:px-0;
+    @apply flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none snap-x snap-mandatory sm:flex-wrap sm:overflow-visible sm:px-0 sm:snap-none;
+  }
+
+  .mobile-carousel {
+    @apply -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 scrollbar-none snap-x snap-mandatory sm:mx-0 sm:grid sm:overflow-visible sm:px-0 sm:pb-0 sm:snap-none;
+  }
+
+  .mobile-carousel-item {
+    @apply w-[min(85vw,20rem)] shrink-0 snap-center sm:w-auto sm:max-w-none;
   }
 }
 
 .text-shadow-hero {
   text-shadow:
-    0 1px 2px rgb(0 0 0 / 0.45),
-    0 2px 14px rgb(0 0 0 / 0.35);
-}
-
-@media (max-width: 639px) {
-  .text-shadow-hero {
-    text-shadow: 0 0 18px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.35);
-  }
+    0 1px 2px rgb(0 0 0 / 0.5),
+    0 4px 24px rgb(0 0 0 / 0.35);
 }
 
 .text-shadow-hero-subtle {
-  text-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+}
+
+.hero-bg-slide {
+  transition: opacity 2.5s ease-in-out;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-slide {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+.hero-vignette {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.72) 0%,
+      rgb(0 0 0 / 0.28) 18%,
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse 95% 75% at 0% 100%,
+      rgb(0 0 0 / 0.55) 0%,
+      transparent 62%
+    );
+}
+
+@media (min-width: 640px) {
+  .hero-vignette {
+    background:
+      linear-gradient(
+        to top,
+        rgb(0 0 0 / 0.65) 0%,
+        rgb(0 0 0 / 0.2) 20%,
+        transparent 45%
+      ),
+      radial-gradient(
+        ellipse 70% 65% at 0% 100%,
+        rgb(0 0 0 / 0.45) 0%,
+        transparent 58%
+      );
+  }
+}
+
+.hero-nav-scrim {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 7rem;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.55), transparent);
+}
+
+@media (min-width: 640px) {
+  .hero-nav-scrim {
+    height: 8.5rem;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 0.45), transparent);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

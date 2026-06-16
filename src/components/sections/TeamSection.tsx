@@ -12,13 +12,13 @@ export default function TeamSection() {
     <section id="team" className="section-padding overflow-x-clip bg-brand-cream">
       <div className="container">
         <SectionHeading eyebrow="Meet The Team" title="Field Leadership You Can Trust" />
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+        <div className="mt-6 section-stack sm:mt-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="relative min-h-[240px] overflow-hidden rounded-2xl sm:min-h-[380px] lg:min-h-[520px]"
+            transition={{ duration: 0.5 }}
+            className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[16/10] lg:min-h-[520px] lg:aspect-auto"
           >
             <Image
               src={PHOTO_URLS.teamAccent}
@@ -30,14 +30,14 @@ export default function TeamSection() {
               loading="lazy"
             />
           </motion.div>
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={member.name}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: index * 0.1 }}
+                transition={{ duration: 0.45, delay: index * 0.08 }}
               >
                 <TeamCard {...member} />
               </motion.div>

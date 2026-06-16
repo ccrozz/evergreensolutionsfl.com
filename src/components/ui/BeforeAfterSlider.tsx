@@ -147,7 +147,7 @@ export default function BeforeAfterSlider({
 
       <div
         className={`pointer-events-none absolute top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-brand-leafGreen text-white shadow-lg ${
-          large ? "h-14 w-14" : "h-12 w-12 sm:h-10 sm:w-10"
+          large ? "h-14 w-14" : "h-14 w-14 sm:h-10 sm:w-10"
         }`}
         style={{ left: `${position}%` }}
         aria-hidden
