@@ -12,7 +12,8 @@ export default function CtaBand() {
         </p>
         <Button
           href="#request-quote"
-          className="mt-5 w-full bg-white text-brand-darkGreen hover:bg-brand-cream sm:mt-8 sm:w-auto"
+          variant="inverse"
+          className="mt-5 w-full sm:mt-8 sm:w-auto"
         >
           Request a Free Quote
         </Button>

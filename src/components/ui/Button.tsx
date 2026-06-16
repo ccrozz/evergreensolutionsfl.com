@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "outline" | "outline-white" | "ghost";
+type Variant = "primary" | "outline" | "outline-white" | "ghost" | "inverse";
 
 type ButtonProps = {
   href: string;
@@ -19,6 +19,8 @@ const variantClasses: Record<Variant, string> = {
     "border-2 border-white text-white hover:bg-white/10 focus-visible:ring-white",
   ghost:
     "bg-white/10 text-white hover:bg-white/20 focus-visible:ring-white",
+  inverse:
+    "bg-white text-brand-darkGreen hover:bg-brand-cream focus-visible:ring-white focus-visible:ring-offset-brand-darkGreen",
 };
 
 export default function Button({
