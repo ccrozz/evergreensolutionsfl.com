@@ -113,6 +113,7 @@ export default function RestorationShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.05 }}
+          className="mx-auto w-full max-w-2xl lg:max-w-3xl"
         >
           <div
             role="tabpanel"
@@ -129,6 +130,7 @@ export default function RestorationShowcase() {
               afterLabel={active.afterLabel ?? "After"}
               initialPosition={active.initialPosition ?? 42}
               priority={categoryIndex === 0 && itemIndex === 0}
+              compact
             />
           </div>
           <p className="mt-4 text-sm leading-relaxed text-brand-darkGreen/80 sm:mt-5">

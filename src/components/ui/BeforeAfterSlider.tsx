@@ -87,7 +87,7 @@ export default function BeforeAfterSlider({
         large
           ? "aspect-[4/3] min-h-[300px] rounded-3xl sm:min-h-[380px] lg:min-h-[480px]"
           : compact
-            ? "aspect-[16/10] max-h-[280px] rounded-2xl sm:max-h-[310px] lg:max-h-[340px]"
+            ? "aspect-[16/10] max-h-[240px] rounded-2xl sm:max-h-[300px] lg:max-h-[360px]"
             : "aspect-[16/10] min-h-[220px] rounded-2xl sm:min-h-0"
       } ${className}`}
       onPointerDown={handlePointerDown}

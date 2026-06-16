@@ -7,7 +7,11 @@ import { NTR_LVR_DESIGNER_URL } from "@/lib/constants";
 const IFRAME_WIDTH = 390;
 const IFRAME_HEIGHT = 844;
 
-export default function NtrLvrPhoneMockup() {
+type NtrLvrPhoneMockupProps = {
+  className?: string;
+};
+
+export default function NtrLvrPhoneMockup({ className = "" }: NtrLvrPhoneMockupProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const [loadIframe, setLoadIframe] = useState(false);
@@ -55,7 +59,7 @@ export default function NtrLvrPhoneMockup() {
   return (
     <div
       ref={containerRef}
-      className="relative mx-auto w-full max-w-[220px] sm:max-w-[260px] lg:max-w-[280px]"
+      className={`relative mx-auto w-full max-w-[200px] sm:max-w-[240px] ${className}`}
     >
       <div className="rounded-[2.5rem] border-[3px] border-zinc-700 bg-zinc-900 p-2 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.65)]">
         <div
